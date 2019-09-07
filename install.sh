@@ -90,6 +90,10 @@ log "Installing dotfiles..."
 log "Home Directory: $HOME_DIR"
 log "Config Directory: $CONFIG_DIR"
 
+# Install Submodules
+git submodule init
+git submodule update
+
 install zshrc $HOME_DIR/.zshrc
 install zsh.d $HOME_DIR/.zsh.d
 
