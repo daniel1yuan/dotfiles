@@ -94,6 +94,7 @@ git submodule update
 
 install zsh/zshrc $HOME_DIR/.zshrc
 install zsh/zsh.d $HOME_DIR/.zsh.d
+install zsh/zplug $HOME_DIR/.zplug
 
 install vim/vimrc $HOME_DIR/.vimrc
 install vim/vim $HOME_DIR/.vim
