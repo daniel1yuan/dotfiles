@@ -1,13 +1,6 @@
 # Load all files from .shell/zshrc.d directory
-if [ -d $HOME/.shellrc/zshrc.d ]; then
-  for file in $HOME/.shellrc/zshrc.d/*.zsh; do
-    source $file
-  done
-fi
-
-# Load all files from .shell/rc.d directory
-if [ -d $HOME/.shellrc/rc.d ]; then
-  for file in $HOME/.shellrc/rc.d/*.sh; do
+if [ -d $HOME/.zsh.d ]; then
+  for file in $HOME/.zsh.d/*.zsh; do
     source $file
   done
 fi

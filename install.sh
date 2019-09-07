@@ -96,4 +96,4 @@ install zsh.d $HOME_DIR/.zsh.d
 install vimrc $HOME_DIR/.vimrc
 install vim $HOME_DIR/.vim
 
-# install kitty $CONFIG_DIR/kitty
+install kitty $CONFIG_DIR/kitty
