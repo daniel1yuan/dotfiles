@@ -94,10 +94,10 @@ log "Config Directory: $CONFIG_DIR"
 git submodule init
 git submodule update
 
-install zshrc $HOME_DIR/.zshrc
-install zsh.d $HOME_DIR/.zsh.d
+install zsh/zshrc $HOME_DIR/.zshrc
+install zsh/zsh.d $HOME_DIR/.zsh.d
 
-install vimrc $HOME_DIR/.vimrc
-install vim $HOME_DIR/.vim
+install vim/vimrc $HOME_DIR/.vimrc
+install vim/vim $HOME_DIR/.vim
 
 install kitty $CONFIG_DIR/kitty
