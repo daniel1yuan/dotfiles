@@ -1,6 +1,16 @@
 #!/bin/sh
+# Parameters:
+# -f Force override
+# -q quiet mode
+# Optional
+#   Home directory, new home directory to copy to. Default: ~/
+#   Config directory, config directory to copy to. Default: ~/.config
+
 HOME_DIR=$HOME
 CONFIG_DIR=$HOME/.config
+WORKING_DIR=$(pwd)
+
+echo $WORKING_DIR
 
 FORCE=0
 VERBOSE=1
@@ -28,25 +38,23 @@ log() {
   fi
 }
 
+get_abs_path() {
+  echo $(cd $1; pwd)
+}
+
 install_file_dir() {
-  local source=$1
+  local source=$WORKING_DIR/$1
   local target=$2
 
   log "Installing $source -> $target"
-  if [ -d $source ]; then
-    log "Recursively copying?"
-    cp -r $source $target
-  else
-    log "install file?"
-    cp $source $target
-  fi
+  ln -s $source $target
 }
 
 install() {
   local source=$1
   local target=$2
 
-  if [ -e $target ] || [ -d $target ]; then
+  if [ -f $target ] || [ -d $target ] || [ -L $target ]; then
     if [ $FORCE -eq 1 ]; then
       if [ -d $target ]; then
         rm -rf $target
@@ -66,10 +74,16 @@ if ! [ -z $1 ]; then
   log "Specified home directory: $1"
   HOME_DIR=$1
 fi
+HOME_DIR=$(get_abs_path $HOME_DIR)
 
 if ! [ -z $2 ]; then
   log "Specified config directory: $2"
   CONFIG_DIR=$2
+fi
+CONFIG_DIR=$(get_abs_path $CONFIG_DIR)
+
+if [ $FORCE -eq 1 ]; then
+  log "Force mode activated"
 fi
 
 log "Installing dotfiles..."
@@ -79,7 +93,7 @@ log "Config Directory: $CONFIG_DIR"
 install zshrc $HOME_DIR/.zshrc
 install zsh.d $HOME_DIR/.zsh.d
 
-# install vimrc $HOME_DIR/.vimrc
-# install vim $HOME_DIR/.vim
+install vimrc $HOME_DIR/.vimrc
+install vim $HOME_DIR/.vim
 
 # install kitty $CONFIG_DIR/kitty
