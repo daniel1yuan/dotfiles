@@ -7,4 +7,10 @@ alias reload="source ~/.zshrc"
 
 alias ta='task add project:$TASK_CONTEXT'
 
-alias clearNPM="rm -rf ./node_modules/.cache/*"
+alias cc="rm -rf ./node_modules/.cache/*"
+
+# Git Aliases
+alias gs="git status"
+alias gc="git checkout"
+alias gp="git pull"
+alias gph="git pull origin HEAD"
