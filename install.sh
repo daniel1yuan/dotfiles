@@ -43,9 +43,14 @@ get_abs_path() {
 install_file_dir() {
   local source=$WORKING_DIR/$1
   local target=$2
+  local use_cp=$3
 
   log "Installing $source -> $target"
-  ln -s $source $target
+  if [ $use_cp = true]; then
+    echo 'Copying instead of linking'
+  else
+    ln -s $source $target
+  fi
 }
 
 install() {
@@ -92,11 +97,11 @@ log "Config Directory: $CONFIG_DIR"
 git submodule init
 git submodule update
 
-install zsh/zshrc $HOME_DIR/.zshrc
-install zsh/zsh.d $HOME_DIR/.zsh.d
-install zsh/zplug $HOME_DIR/.zplug
+install zsh/zshrc $HOME_DIR/.zshrc false
+install zsh/zsh.d $HOME_DIR/.zsh.d false
+install zsh/zplug $HOME_DIR/.zplug true
 
-install vim/vimrc $HOME_DIR/.vimrc
-install vim/vim $HOME_DIR/.vim
+install vim/vimrc $HOME_DIR/.vimrc false
+install vim/vim $HOME_DIR/.vim true
 
-install kitty $CONFIG_DIR/kitty
+install kitty $CONFIG_DIR/kitty false
