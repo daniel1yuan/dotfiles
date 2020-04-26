@@ -46,8 +46,8 @@ install_file_dir() {
   local use_cp=$3
 
   log "Installing $source -> $target"
-  if [ $use_cp = true]; then
-    echo 'Copying instead of linking'
+  if [ "$use_cp" = true ]; then
+    cp -r $source $target
   else
     ln -s $source $target
   fi
@@ -56,6 +56,7 @@ install_file_dir() {
 install() {
   local source=$1
   local target=$2
+  local use_cp=$3
 
   if [ -f $target ] || [ -d $target ] || [ -L $target ]; then
     if [ $FORCE -eq 1 ]; then
@@ -64,12 +65,12 @@ install() {
       else
         rm $target
       fi
-      install_file_dir $source $target
+      install_file_dir $source $target $use_cp
     else
       log "$target already exsists, please remove the file/dir or enable force mode -f"
     fi
   else
-    install_file_dir $source $target
+    install_file_dir $source $target $use_cp
   fi
 }
 
