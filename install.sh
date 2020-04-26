@@ -103,6 +103,6 @@ install zsh/zsh.d $HOME_DIR/.zsh.d false
 install zsh/zplug $HOME_DIR/.zplug true
 
 install vim/vimrc $HOME_DIR/.vimrc false
-install vim/vim $HOME_DIR/.vim true
+install vim/vim $HOME_DIR/.vim false
 
-install kitty $CONFIG_DIR/kitty false
+install kitty $CONFIG_DIR/kitty false 
