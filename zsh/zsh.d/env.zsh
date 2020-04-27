@@ -14,3 +14,6 @@ export PRIVATE_KEY=~/keys/private.pem
 export EDITOR=vim
 export TASK_CONTEXT='work'
 
+# Zsh nvm plugin use lazy load
+export NVM_LAZY_LOAD=true
+
