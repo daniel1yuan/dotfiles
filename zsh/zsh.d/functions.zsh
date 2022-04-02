@@ -119,3 +119,7 @@ function pruneBranches() {
 function clearSwp() {
   sudo swapoff -a; sudo swapon -a;
 }
+
+# Automatically copies kitty terminal's terminfo into the server while ssh
+alias kssh="kitty +kitten ssh"
+
