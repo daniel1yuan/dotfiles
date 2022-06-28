@@ -105,7 +105,7 @@ function decrypt() {
 }
 
 function pruneBranches() {
-  local protectedBranchesRegEx="(^\*|master|alpha|beta|omega)"
+  local protectedBranchesRegEx="(^\*|master|alpha|beta|omega|main)"
   local pruneBranches=$(git branch --merged | egrep -v $protectedBranchesRegEx)
   printf "Pruning These Branches [y/N]:\n${YELLOW}%s ${NORMAL}" $pruneBranches
   if read -q; then
@@ -114,6 +114,10 @@ function pruneBranches() {
     git remote prune origin
   fi
   echo;
+}
+
+function pullHead() {
+  git pull origin $(git rev-parse --abbrev-ref HEAD)
 }
 
 function clearSwp() {
