@@ -6,14 +6,14 @@ export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 export PATH=~/.local/bin:$PATH
 
-# Encryption Keys
-export PUBLIC_KEY=~/keys/public.pem
-export PRIVATE_KEY=~/keys/private.pem
-
 # Environment Context
-export EDITOR=vim
-export TASK_CONTEXT='work'
+export EDITOR=nvim
 
-# Zsh nvm plugin use lazy load
-export NVM_LAZY_LOAD=true
+# Zsh nvm plugin: lazy load in interactive shells, eager load otherwise
+# Non-interactive shells (CI, Claude Code, scripts) need node/npm available immediately
+if [[ -o interactive ]]; then
+  export NVM_LAZY_LOAD=true
+else
+  export NVM_LAZY_LOAD=false
+fi
 
