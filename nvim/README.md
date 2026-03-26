@@ -163,6 +163,16 @@ Works with `()`, `[]`, `{}`, `""`, `''`, `` ` ` ``, HTML tags (`t`), and more.
 
 Also supports `:DiffviewOpen main..HEAD` to diff against a branch. Close with `:DiffviewClose`.
 
+## Hard Reset
+
+To wipe all plugins, state, and cache and start fresh (config is preserved):
+
+```bash
+rm -rf ~/.local/share/nvim ~/.local/state/nvim ~/.cache/nvim
+```
+
+Next time you open nvim, lazy.nvim will re-bootstrap and reinstall everything.
+
 ## Language Support
 
 LSP servers and formatters are auto-installed via Mason on first launch.

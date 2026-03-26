@@ -7,6 +7,7 @@
 #   sh install.sh --dry-run                  Dry run (show what would happen)
 #   sh install.sh -f --home ~/custom        Custom home directory
 #   sh install.sh -f --config ~/custom-cfg  Custom config directory
+#   sh install.sh --cleanup                  Remove all managed symlinks
 
 HOME_DIR="$HOME"
 CONFIG_DIR="$HOME/.config"
@@ -15,6 +16,7 @@ WORKING_DIR="$(cd "$(dirname "$0")" && pwd)"
 FORCE=0
 VERBOSE=1
 DRY_RUN=0
+CLEANUP=0
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -22,6 +24,7 @@ while [ $# -gt 0 ]; do
     -q) VERBOSE=0 ;;
     -fq|-qf) FORCE=1; VERBOSE=0 ;;
     --dry-run) DRY_RUN=1; VERBOSE=1 ;;
+    --cleanup) CLEANUP=1 ;;
     --home)
       if [ -z "$2" ] || [ "${2#-}" != "$2" ]; then
         echo "Error: --home requires a directory argument" >&2; exit 1
@@ -93,8 +96,48 @@ link() {
   fi
 }
 
+cleanup() {
+  local source="$WORKING_DIR/$1"
+  local target="$2"
+
+  if [ -L "$target" ] && [ "$(readlink "$target")" = "$source" ]; then
+    log "  [remove] $target"
+    if [ $DRY_RUN -eq 0 ]; then
+      rm "$target"
+    fi
+  elif [ -L "$target" ] || [ -e "$target" ]; then
+    log "  [skip] $target (not managed by dotfiles)"
+  else
+    log "  [ok] $target (already absent)"
+  fi
+}
+
 if [ $DRY_RUN -eq 1 ]; then
   log "Dry run — no changes will be made"
+fi
+
+if [ $CLEANUP -eq 1 ]; then
+  log "Cleaning up dotfiles..."
+  log "  Home:   $HOME_DIR"
+  log "  Config: $CONFIG_DIR"
+  log ""
+
+  for entry in $LINKS; do
+    source="${entry%%:*}"
+    target="${entry#*:}"
+    if [ -n "$source" ] && [ -n "$target" ]; then
+      cleanup "$source" "$target"
+    fi
+  done
+
+  # Remove empty parent directories created by install
+  if [ $DRY_RUN -eq 0 ]; then
+    rmdir "$CONFIG_DIR/zsh" 2>/dev/null
+  fi
+
+  log ""
+  log "Cleanup complete."
+  exit 0
 fi
 
 if [ $FORCE -eq 1 ]; then
