@@ -24,25 +24,32 @@ These must be installed before first launch:
 - **Search:** Case-insensitive with smart case
 - **Undo:** Persistent undo to `~/.local/state/nvim/undodir`
 - **Scrolloff:** 10 lines
+- **Splits:** Open right and below
 
 ## Plugins
 
 | Plugin | Purpose |
 |--------|---------|
 | catppuccin | Color scheme (Mocha variant) |
-| telescope.nvim | Fuzzy finder (files, grep, buffers) |
+| telescope.nvim | Fuzzy finder (files, grep, buffers) with fzf-native sorter |
 | nvim-tree | File tree browser |
 | blink.cmp | Autocompletion with LSP and snippet support |
 | treesitter | Syntax highlighting |
 | conform.nvim | Code formatting (format on save) |
 | gitsigns | Git diff indicators in gutter |
 | fugitive | Git integration |
+| diffview.nvim | File-by-file diff viewer and file history |
 | which-key | Keybind hints |
 | undotree | Undo history visualization |
 | todo-comments | Highlight TODO/FIXME/etc |
 | typescript-tools | TypeScript language support |
 | lazydev | Lua LSP for neovim config editing |
 | Mason | LSP server and tool installer |
+| nvim-surround | Add/change/delete surrounding chars |
+| nvim-autopairs | Auto-close brackets, quotes, etc |
+| nvim-ts-autotag | Auto-close and rename HTML/JSX/Vue tags |
+| flash.nvim | Quick cursor jumps with labels |
+| harpoon | Pin and jump between files instantly |
 
 ## Key Bindings
 
@@ -56,6 +63,48 @@ These must be installed before first launch:
 | `<leader>f` | Format buffer |
 | `<leader>u` | Toggle undo tree |
 | `<leader>t` | Toggle file tree |
+
+### Harpoon
+
+| Binding | Action |
+|---------|--------|
+| `<leader>a` | Add current file to harpoon |
+| `<leader>e` | Open harpoon menu (reorder/remove) |
+| `<leader>1-4` | Jump to harpoon file 1-4 |
+
+### Flash
+
+| Binding | Action |
+|---------|--------|
+| `s{chars}` | Jump to any match (labels appear after typing) |
+| `S` | Treesitter select (label a code block/function/node to select it) |
+| `<C-s>` | Toggle flash labels during `/` search |
+
+Flash also auto-labels matches during `/` search, so you can jump to any result directly instead of pressing `n`.
+
+### Surround
+
+| Action | Binding | Example |
+|--------|---------|---------|
+| Add surrounding | `ys{motion}{char}` | `ysiw)` wraps word in parens |
+| Change surrounding | `cs{old}{new}` | `cs"'` changes `"hello"` to `'hello'` |
+| Delete surrounding | `ds{char}` | `ds(` removes surrounding parens |
+
+Works with `()`, `[]`, `{}`, `""`, `''`, `` ` ` ``, HTML tags (`t`), and more.
+
+### Windows
+
+| Binding | Action |
+|---------|--------|
+| `<leader>wv` | Vertical split (side-by-side) |
+| `<leader>ws` | Horizontal split |
+| `<leader>wd` | Close window |
+| `<leader>wo` | Close all other windows |
+| `<leader>w=` | Balance window sizes |
+| `<C-h/j/k/l>` | Move focus left/down/up/right (fast) |
+| `<leader>wh/j/k/l` | Move focus left/down/up/right |
+| `<leader>wH/J/K/L` | Move window left/down/up/right |
+| `<leader>ww` | Cycle to next window |
 
 ### Telescope (Search)
 
@@ -101,6 +150,19 @@ These must be installed before first launch:
 | `<leader>hb` | Blame line |
 | `<leader>hd` | Diff against index |
 
+### Diff View
+
+| Binding | Action |
+|---------|--------|
+| `<leader>gd` | Open diff view (working tree vs index) |
+| `<leader>gh` | File history for current file |
+| `zo` | Expand folded unchanged region |
+| `zR` | Expand all folds (show full file) |
+| `zM` | Collapse all folds (show hunks only) |
+| `zc` | Collapse fold under cursor |
+
+Also supports `:DiffviewOpen main..HEAD` to diff against a branch. Close with `:DiffviewClose`.
+
 ## Language Support
 
 LSP servers and formatters are auto-installed via Mason on first launch.
@@ -108,12 +170,12 @@ LSP servers and formatters are auto-installed via Mason on first launch.
 | Language | LSP | Formatter |
 |----------|-----|-----------|
 | Lua | lua_ls | stylua |
-| TypeScript/JavaScript | typescript-tools | - |
-| Python | pyright | - |
-| Vue | volar | - |
-| Rust | rust_analyzer | - |
-| Go | gopls | - |
-| JSON | jsonls | - |
-| YAML | yamlls | - |
+| TypeScript/JavaScript | typescript-tools | prettier |
+| Python | pyright | ruff |
+| Vue | vue_ls | prettier |
+| Rust | rust_analyzer | rustfmt (via rustup) |
+| Go | gopls | goimports |
+| JSON | jsonls | prettier |
+| YAML | yamlls | prettier |
 
 Additional LSP servers can be added in `lua/danielyuan/lazy/lsp.lua`.
