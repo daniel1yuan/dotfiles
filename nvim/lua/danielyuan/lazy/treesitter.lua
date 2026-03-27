@@ -29,42 +29,20 @@ return { -- Highlight, edit, and navigate code
       "vimdoc",
     })
 
+    -- Auto-install parsers for new filetypes
     vim.api.nvim_create_autocmd("FileType", {
       callback = function(args)
-        local buf = args.buf
-        local ft = args.match
+        if vim.bo[args.buf].buftype ~= "" then return end
 
-        -- Skip UI/special buffers and plugin filetypes without treesitter parsers.
-        -- Add patterns here for other plugins that trigger false positives.
-        local skip_ft = { "^Diffview" }
-        if vim.bo[buf].buftype ~= "" then
-          return
-        end
-        for _, pattern in ipairs(skip_ft) do
-          if ft:match(pattern) then
-            return
-          end
-        end
+        local lang = vim.treesitter.language.get_lang(args.match)
+        if not lang then return end
+        if pcall(vim.treesitter.start, args.buf, lang) then return end
 
-        local lang = vim.treesitter.language.get_lang(ft)
-        if not lang then
-          return
-        end
-
-        -- Parser + queries already available
-        if pcall(vim.treesitter.start, buf, lang) then
-          return
-        end
-
-        -- Not installed — install then enable
-        local task = ts.install({ lang })
-        task:await(function(err)
-          if err then
-            return
-          end
+        ts.install({ lang }):await(function(err)
+          if err then return end
           vim.schedule(function()
-            if vim.api.nvim_buf_is_valid(buf) then
-              pcall(vim.treesitter.start, buf, lang)
+            if vim.api.nvim_buf_is_valid(args.buf) then
+              pcall(vim.treesitter.start, args.buf, lang)
             end
           end)
         end)

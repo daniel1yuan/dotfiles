@@ -1,0 +1,29 @@
+# Shell tools
+brew "bat"          # Syntax-highlighted cat replacement
+brew "starship"     # Cross-shell prompt
+brew "eza"          # ls replacement with git status and icons
+brew "fd"           # Fast file finder, powers fzf's Ctrl-T/Alt-C
+brew "fzf"          # Fuzzy finder for shell history, files, directories
+brew "ripgrep"      # Fast recursive grep, used by telescope in nvim
+brew "zoxide"       # Smarter cd with frecency-based directory jumping
+
+# Version/package management
+brew "mise"          # Manages node, python, go, and other runtimes
+brew "uv"            # Fast Python package manager
+
+# Development
+brew "neovim"
+brew "tree-sitter"
+brew "tree-sitter-cli"
+
+# Utilities
+brew "htop"
+brew "mkcert"
+brew "nss"
+brew "yq"
+
+# Local dev
+brew "caddy"
+
+# Apps
+cask "hammerspoon"

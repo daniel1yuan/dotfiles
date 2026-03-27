@@ -15,6 +15,8 @@ return {
         gitsigns = true,
         nvimtree = true,
         treesitter = true,
+        snacks = true,
+        trouble = true,
         notify = false,
         mini = {
           enabled = true,

@@ -1,0 +1,26 @@
+# Shell tools
+bat
+starship
+eza
+fd-find
+fzf
+ripgrep
+zoxide
+
+# Development
+htop
+yq
+
+# NOTE: mise is not in apt. Install via its install script:
+#   curl https://mise.run | sh
+# Then use mise to install node, python, go, etc.
+
+# NOTE: uv (Python package manager) is not in apt. Install via:
+#   curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Build tools (treesitter parser compilation)
+build-essential
+
+# NOTE: neovim is not included — Ubuntu's apt repo ships an outdated version.
+# Install neovim 0.11+ separately via AppImage or the unstable PPA:
+#   https://github.com/neovim/neovim/blob/master/INSTALL.md#ubuntu

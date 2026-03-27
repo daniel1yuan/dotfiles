@@ -1,0 +1,148 @@
+"$schema" = "https://starship.rs/config-schema.json"
+
+palette = "catppuccin_mocha"
+add_newline = true
+
+format = """
+$os\
+$username\
+$hostname\
+$directory\
+[](fg:blue bg:mauve)\
+$git_branch\
+$git_status\
+[](fg:mauve)\
+$python\
+$nodejs\
+$golang\
+$rust\
+$sudo\
+$cmd_duration\
+$fill\
+$battery\
+$time\
+$line_break\
+$character"""
+
+[fill]
+symbol = " "
+
+[os]
+disabled = false
+style = "bg:blue fg:crust"
+format = "[$symbol ]($style)"
+
+[os.symbols]
+Macos = ""
+Linux = ""
+Ubuntu = ""
+
+[username]
+show_always = false
+style_user = "bg:blue fg:crust"
+style_root = "bg:red fg:crust bold"
+format = "[$user@]($style)"
+
+[hostname]
+ssh_only = true
+style = "bg:blue fg:crust"
+format = "[$hostname ]($style)"
+
+[directory]
+truncation_length = 5
+truncation_symbol = ".../"
+fish_style_pwd_dir_length = 2
+style = "bg:blue fg:crust bold"
+format = "[$path ]($style)"
+
+[git_branch]
+symbol = ""
+style = "bg:mauve fg:crust"
+format = "[ $symbol $branch ]($style)"
+
+[git_status]
+style = "bg:mauve fg:crust"
+format = "[$all_status$ahead_behind]($style)"
+ahead = "⇡${count} "
+behind = "⇣${count} "
+diverged = "⇡${ahead_count}⇣${behind_count} "
+modified = "!"
+staged = "+"
+untracked = "?"
+
+[python]
+symbol = ""
+style = "fg:yellow"
+format = " [$symbol $version( \\($virtualenv\\))]($style)"
+
+[nodejs]
+symbol = ""
+style = "fg:green"
+format = " [$symbol $version]($style)"
+
+[golang]
+symbol = ""
+style = "fg:sapphire"
+format = " [$symbol $version]($style)"
+
+[rust]
+symbol = ""
+style = "fg:peach"
+format = " [$symbol $version]($style)"
+
+[sudo]
+disabled = false
+symbol = "🔓"
+style = "fg:peach"
+format = " [$symbol]($style)"
+
+[cmd_duration]
+min_time = 2_000
+style = "fg:yellow"
+format = " [$duration]($style)"
+
+[battery]
+disabled = false
+format = "[$symbol$percentage]($style) "
+
+[[battery.display]]
+threshold = 20
+style = "fg:red bold"
+
+[time]
+disabled = false
+time_format = "%H:%M"
+style = "fg:overlay1"
+format = "[$time]($style)"
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"

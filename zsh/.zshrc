@@ -5,33 +5,15 @@ if [[ -d "$ZDOTDIR/zsh.d" ]]; then
   done
 fi
 
-# Zplug Configuration
-export ZPLUG_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zplug"
+# Antidote plugin manager
+ANTIDOTE_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/antidote"
 
-if [[ ! -d "$ZPLUG_HOME" ]]; then
-  git clone https://github.com/zplug/zplug "$ZPLUG_HOME"
+if [[ ! -d "$ANTIDOTE_HOME" ]]; then
+  git clone --depth=1 https://github.com/mattmc3/antidote.git "$ANTIDOTE_HOME"
 fi
 
-if [[ -f "$ZPLUG_HOME/init.zsh" ]]; then
-  source "$ZPLUG_HOME/init.zsh"
-
-  # Plugins
-  zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-  zplug 'zsh-users/zsh-completions'
-  zplug 'zsh-users/zsh-history-substring-search'
-  zplug 'zsh-users/zsh-autosuggestions'
-  zplug 'zsh-users/zsh-syntax-highlighting', defer:2
-  zplug "eendroroy/alien"
-  zplug "lukechilds/zsh-nvm"
-
-  # Load Plugins
-  zplug load
-
-  # Install all uninstalled plugins
-  if ! zplug check; then
-    zplug install
-  fi
-fi
+source "$ANTIDOTE_HOME/antidote.zsh"
+antidote load "$ZDOTDIR/zsh_plugins.txt"
 
 # Completions
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'

@@ -12,7 +12,7 @@ These must be installed before first launch:
 | tree-sitter-cli | Parser compilation | `brew install tree-sitter-cli` | `npm install -g tree-sitter-cli` or `cargo install tree-sitter-cli` |
 | ripgrep | Telescope live grep | `brew install ripgrep` | `sudo apt install ripgrep` |
 | fd | Telescope file finder | `brew install fd` | `sudo apt install fd-find` |
-| node/npm | LSP servers, typescript-tools | Via NVM: `nvm install --lts` | Via NVM: `nvm install --lts` |
+| node/npm | LSP servers, typescript-tools | Via mise: `mise use -g node@lts` | Via mise: `mise use -g node@lts` |
 | C compiler | Treesitter parser compilation | `xcode-select --install` | `sudo apt install build-essential` |
 | JetBrainsMono Nerd Font | Icons and UI | See [kitty/README.md](../kitty/README.md) | See [kitty/README.md](../kitty/README.md) |
 
@@ -40,6 +40,8 @@ These must be installed before first launch:
 | fugitive | Git integration |
 | diffview.nvim | File-by-file diff viewer and file history |
 | which-key | Keybind hints |
+| trouble.nvim | Diagnostics panel (project-wide and per-buffer) |
+| snacks.nvim | Dashboard, indent guides, notifications, scratch buffers |
 | undotree | Undo history visualization |
 | todo-comments | Highlight TODO/FIXME/etc |
 | typescript-tools | TypeScript language support |
@@ -63,6 +65,8 @@ These must be installed before first launch:
 | `<leader>f` | Format buffer |
 | `<leader>u` | Toggle undo tree |
 | `<leader>t` | Toggle file tree |
+| `<leader>.` | Open scratch buffer |
+| `<leader>n` | Notification history |
 
 ### Harpoon
 
@@ -92,6 +96,14 @@ Flash also auto-labels matches during `/` search, so you can jump to any result 
 
 Works with `()`, `[]`, `{}`, `""`, `''`, `` ` ` ``, HTML tags (`t`), and more.
 
+### Diagnostics (Trouble)
+
+| Binding | Action |
+|---------|--------|
+| `<leader>xx` | Project-wide diagnostics |
+| `<leader>xd` | Current buffer diagnostics |
+| `<leader>xq` | Quickfix list |
+
 ### Windows
 
 | Binding | Action |
@@ -101,9 +113,8 @@ Works with `()`, `[]`, `{}`, `""`, `''`, `` ` ` ``, HTML tags (`t`), and more.
 | `<leader>wd` | Close window |
 | `<leader>wo` | Close all other windows |
 | `<leader>w=` | Balance window sizes |
-| `<C-h/j/k/l>` | Move focus left/down/up/right (fast) |
-| `<leader>wh/j/k/l` | Move focus left/down/up/right |
-| `<leader>wH/J/K/L` | Move window left/down/up/right |
+| `<C-h/j/k/l>` | Move focus left/down/up/right |
+| `<leader>wH/J/K/L` | Move window position left/down/up/right |
 | `<leader>ww` | Cycle to next window |
 
 ### Telescope (Search)
