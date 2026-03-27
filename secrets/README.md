@@ -17,7 +17,8 @@ We use [sops](https://github.com/getsops/sops) + [age](https://github.com/FiloSo
 ├── age/
 │   └── keys.txt    # this machine's private key (never leaves this machine)
 ├── env/
-│   └── global.env  # sops-encrypted env vars, sourced at shell init
+│   ├── global.env  # sops-encrypted, sourced at shell init
+│   └── *.env       # any .env file here gets sourced automatically
 ├── keys/
 │   └── *.pem       # TLS/service keys
 └── db/
@@ -29,6 +30,8 @@ We use [sops](https://github.com/getsops/sops) + [age](https://github.com/FiloSo
 ### Prerequisites
 
 ```sh
+# Should be auto-installed already by dotfiles package setup.sh
+
 # macOS
 brew install age sops
 
@@ -39,7 +42,7 @@ mise use -g age@latest sops@latest
 ### First-time setup
 
 ```sh
-sh ~/Projects/dotfiles/secrets/setup.sh
+sh secrets/setup.sh
 ```
 
 This creates the `~/.secrets/` directory structure, generates an age key, and writes the initial `.sops.yaml`. If any of those already exist, it skips them. The script never overwrites or deletes anything.
@@ -62,13 +65,31 @@ Save and close. sops handles the encryption.
 
 ## Daily usage
 
-| Command | What it does |
-|---------|-------------|
-| `secrets-edit` | Edit the global secrets file |
-| `secrets-edit ~/.secrets/env/project.env` | Edit a specific secrets file |
-| `secrets-show` | Print decrypted global secrets to stdout |
+### Shell helpers
 
-The global secrets file is automatically sourced at shell startup if sops and the file both exist. If either is missing, it's a no-op.
+These are defined in the dotfiles zsh config and available in any shell session.
+
+| Command                                    | What it does                               |
+| ------------------------------------------ | ------------------------------------------ |
+| `secrets-edit`                             | Edit `~/.secrets/env/global.env` (default) |
+| `secrets-edit ~/.secrets/env/<custom>.env` | Edit (or create) a specific secrets file   |
+| `secrets-show`                             | Print decrypted `global.env` to stdout     |
+| `secrets-show ~/.secrets/env/<custom>.env` | Print a specific decrypted file to stdout  |
+
+Both commands validate that your age key exists before doing anything. If the file doesn't exist yet, `secrets-edit` creates a new encrypted file.
+
+### Auto-sourcing
+
+All `.env` files in `~/.secrets/env/` are automatically sourced at shell startup. Just drop a new encrypted file in the directory and it gets picked up on next shell init. If sops isn't installed or the directory is empty, it's a no-op. If a file fails to decrypt (corrupt, unencrypted, etc.), you'll get a warning instead of a silent skip.
+
+### Environment variables
+
+These are exported in the dotfiles zsh config so sops knows where to find things:
+
+| Variable            | Value                     | Purpose                                 |
+| ------------------- | ------------------------- | --------------------------------------- |
+| `SOPS_AGE_KEY_FILE` | `~/.secrets/age/keys.txt` | Tells sops where the age private key is |
+| `SOPS_CONFIG`       | `~/.secrets/.sops.yaml`   | Tells sops where the creation rules are |
 
 ## Adding a new machine
 
@@ -81,22 +102,14 @@ The global secrets file is automatically sourced at shell startup if sops and th
    ```
 5. Sync the updated `.sops.yaml` and `.env` files to the new machine (the `age/keys.txt` stays local)
 
-## Per-project secrets with direnv
+## Important: everything in `env/` is global
 
-For secrets scoped to a specific project, create a separate env file and source it in a `.envrc`:
-
-```sh
-# Create the encrypted file
-secrets-edit ~/.secrets/env/myproject.env
-
-# In the project's .envrc
-eval "$(sops -d ~/.secrets/env/myproject.env 2>/dev/null)"
-```
+All `.env` files in `~/.secrets/env/` are sourced into every shell session. Don't put project-scoped secrets here. For project-specific secrets, use a local `.env` file in the project directory (gitignored).
 
 ## Safety
 
 - `setup.sh` never overwrites existing files or directories
 - `setup.sh` never deletes anything
-- The dotfiles `install.sh` doesn't touch `~/.secrets/` in any way (and never will)
+- The dotfiles `install.sh` doesn't touch `~/.secrets/` in any way
 - Uninstalling dotfiles doesn't affect secrets
 - Plaintext only exists in memory during shell sessions

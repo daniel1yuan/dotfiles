@@ -3,11 +3,17 @@ export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 export PATH=~/.local/bin:$PATH
 
-# sops/age: decrypt secrets into environment if available
+# sops/age: decrypt and source all encrypted env files in ~/.secrets/env/.
+# Each .env file is sops-encrypted with age. We decrypt at shell init so secrets
+# are only in memory, never plaintext on disk. If decryption fails (corrupt file,
+# unencrypted file dropped in by accident), we warn instead of silently skipping.
 export SOPS_AGE_KEY_FILE="$HOME/.secrets/age/keys.txt"
 export SOPS_CONFIG="$HOME/.secrets/.sops.yaml"
-if (( $+commands[sops] )) && [[ -f "$HOME/.secrets/env/global.env" ]]; then
-  eval "$(sops -d "$HOME/.secrets/env/global.env" 2>/dev/null)"
+if (( $+commands[sops] )); then
+  for f in "$HOME/.secrets/env/"*.env(N); do
+    local decrypted
+    decrypted="$(sops -d "$f" 2>&1)" && eval "$decrypted" || echo "secrets: failed to decrypt $f" >&2
+  done
 fi
 
 # Environment Context
