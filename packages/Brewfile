@@ -16,6 +16,10 @@ brew "neovim"
 brew "tree-sitter"
 brew "tree-sitter-cli"
 
+# Secrets management
+brew "age"
+brew "sops"
+
 # Utilities
 brew "htop"
 brew "mkcert"

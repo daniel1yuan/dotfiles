@@ -11,6 +11,11 @@ fzf
 #   curl -sS https://starship.rs/install.sh | sh
 starship
 
+# Secrets management
+# NOTE: sops is not in apt. Install via mise:
+#   mise use -g sops@latest
+age
+
 # Development
 htop
 yq

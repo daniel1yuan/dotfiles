@@ -11,6 +11,7 @@ Personal dotfiles for zsh, neovim, kitty, and starship. XDG-compliant where poss
 | **kitty** | `kitty/` | Terminal emulator with custom keybindings and theme |
 | **starship** | `starship/` | Minimal cross-shell prompt (directory, git, command duration) |
 | **mise** | via zsh | Runtime version manager for node, python, go |
+| **secrets** | `secrets/` | Secrets management with [sops](https://github.com/getsops/sops) + [age](https://github.com/FiloSottile/age) (optional) |
 
 ### Shell tools (initialized in zsh config)
 
@@ -72,7 +73,19 @@ sh install.sh --uninstall
 | `--home <dir>` | Custom home directory (default: `~`) |
 | `--config <dir>` | Custom config directory (default: `~/.config`) |
 
-### 4. First launch
+### 4. Secrets (optional)
+
+If you need encrypted environment variables or other secrets on this machine:
+
+```sh
+sh secrets/setup.sh
+```
+
+This sets up `~/.secrets/` with an age key and sops config. See [`secrets/README.md`](secrets/README.md) for the full workflow (adding machines, editing secrets, per-project secrets via direnv).
+
+The secrets directory syncs manually across machines (same as your KeePass db). The dotfiles install script doesn't touch `~/.secrets/` in any way.
+
+### 5. First launch
 
 **Shell:** antidote auto-clones plugins on first launch. mise activates runtimes.
 
@@ -95,6 +108,9 @@ dotfiles/
 ├── kitty/               → ~/.config/kitty/
 ├── starship/
 │   └── starship.toml    → ~/.config/starship.toml
+├── secrets/
+│   ├── setup.sh         # Sets up ~/.secrets/ (never overwrites)
+│   └── README.md        # Secrets management docs
 └── install.sh           # Symlink installer
 ```
 
