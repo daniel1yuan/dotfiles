@@ -2,19 +2,18 @@
 bat
 eza
 fd-find
-
+ripgrep
+zoxide
 # NOTE: fzf may be outdated in the bundled apt versions. Install with mise after removing it if it is
 #  mise use -g fzf@latest
 fzf
-ripgrep
-zoxide
+# NOTE: Starship only in apt on Ubuntu 25.04+ . Install using its install script
+#   curl -sS https://starship.rs/install.sh | sh
+starship
 
 # Development
 htop
 yq
-
-# NOTE: starship is not in apt. Install using its install script
-#   curl -sS https://starship.rs/install.sh | sh
 
 # NOTE: mise is not in apt. Install via its install script:
 #   curl https://mise.run | sh
