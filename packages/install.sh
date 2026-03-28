@@ -48,8 +48,23 @@ install_debian() {
     fi
   done < "$SCRIPT_DIR/apt.txt"
 
+  available=""
+  unavailable=""
+  for pkg in $packages; do
+    if apt-cache show "$pkg" >/dev/null 2>&1; then
+      available="$available $pkg"
+    else
+      unavailable="$unavailable $pkg"
+    fi
+  done
+
+  if [ -n "$unavailable" ]; then
+    echo "Skipping packages not in apt:$unavailable"
+    echo "Check packages/apt.txt for manual install instructions."
+  fi
+
   echo "Installing packages via apt..."
-  sudo apt install -y $packages
+  sudo apt install -y $available
 
   # fd and bat ship under different binary names on Debian/Ubuntu
   mkdir -p "$HOME/.local/bin"
