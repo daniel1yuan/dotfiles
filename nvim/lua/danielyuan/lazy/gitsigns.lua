@@ -49,6 +49,7 @@ return {
         gitsigns.blame_line({ full = true })
       end, "Blame line")
       map("n", "<leader>hd", gitsigns.diffthis, "Diff against index")
+      map("n", "<leader>hB", gitsigns.toggle_current_line_blame, "Toggle inline blame")
     end,
   },
 }

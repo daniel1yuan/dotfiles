@@ -61,3 +61,6 @@ vim.opt.timeoutlen = 300
 -- Configure how new splits should be opened
 vim.opt.splitright = true
 vim.opt.splitbelow = true
+
+-- Load project-local .nvim.lua if present (used for per-project settings like format-on-save)
+vim.opt.exrc = true

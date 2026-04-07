@@ -35,7 +35,7 @@ These must be installed before first launch:
 | nvim-tree | File tree browser |
 | blink.cmp | Autocompletion with LSP and snippet support |
 | treesitter | Syntax highlighting |
-| conform.nvim | Code formatting (format on save) |
+| conform.nvim | Code formatting (manual via `<leader>f`, opt-in format-on-save per project) |
 | gitsigns | Git diff indicators in gutter |
 | fugitive | Git integration |
 | diffview.nvim | File-by-file diff viewer and file history |
@@ -55,28 +55,117 @@ These must be installed before first launch:
 
 ## Key Bindings
 
+Bindings are organized by three mental models:
+- **`g` = git (repo-level)** — status, blame, log, diffs
+- **`h` = hunks (change-level)** — staging, resetting, previewing individual changes
+- **`s` = search** — finding things via telescope
+
+Within groups, letters stay consistent where possible: `s` = the main action, `b/B` = blame, `d` = diff/diagnostics, `r` = reset/resume. Capital = bigger version (`h` file history → `H` repo history, `b` blame line → `B` toggle blame).
+
+### Git (`<leader>g`)
+
+| Binding | Action | Plugin |
+|---------|--------|--------|
+| `<leader>gs` | Git status | fugitive |
+| `<leader>gb` | Blame (full file) | fugitive |
+| `<leader>gl` | Log (oneline) | fugitive |
+| `<leader>gd` | Diff view (working tree vs index) | diffview |
+| `<leader>gm` | Diff against branch (prompted, default: main) | diffview |
+| `<leader>gq` | Close diff view | diffview |
+| `<leader>gh` | File history (current file) | diffview |
+| `<leader>gH` | File history (full repo) | diffview |
+
+Diffview fold controls: `zo` expand, `zc` collapse, `zR` expand all, `zM` collapse all.
+
+### Hunks (`<leader>h`)
+
+| Binding | Action |
+|---------|--------|
+| `]c` / `[c` | Next / previous hunk |
+| `<leader>hs` | Stage hunk (normal + visual) |
+| `<leader>hr` | Reset hunk (normal + visual) |
+| `<leader>hS` | Stage buffer |
+| `<leader>hu` | Undo stage hunk |
+| `<leader>hR` | Reset buffer |
+| `<leader>hp` | Preview hunk |
+| `<leader>hb` | Blame line (one-shot) |
+| `<leader>hB` | Toggle inline blame |
+| `<leader>hd` | Diff against index |
+
+### Search (`<leader>s`)
+
+| Binding | Action |
+|---------|--------|
+| `<leader>sf` | Find files |
+| `<leader>sg` | Live grep |
+| `<leader>sw` | Grep current word |
+| `<leader>sh` | Help tags |
+| `<leader>sk` | Keymaps |
+| `<leader>ss` | Telescope builtins |
+| `<leader>sd` | Diagnostics |
+| `<leader>sr` | Search and replace (project-wide, grug-far) |
+| `<leader>sl` | Resume last search |
+| `<leader>s.` | Recent files |
+| `<leader>sc` | Git commits |
+| `<leader>sb` | Git branches |
+| `<leader>st` | TODOs |
+| `<leader><leader>` | Open buffers |
+
+### Diagnostics (`<leader>x`)
+
+| Binding | Action |
+|---------|--------|
+| `<leader>xx` | Project-wide diagnostics |
+| `<leader>xd` | Current buffer diagnostics |
+| `<leader>xq` | Quickfix list |
+| `<leader>q` | Diagnostics float |
+| `<leader>Q` | Location list |
+
+### Windows (`<leader>w`)
+
+| Binding | Action |
+|---------|--------|
+| `<leader>wv` | Vertical split (side-by-side) |
+| `<leader>ws` | Horizontal split |
+| `<leader>wd` | Close window |
+| `<leader>wo` | Close all other windows |
+| `<leader>w=` | Balance window sizes |
+| `<C-h/j/k/l>` | Move focus left/down/up/right |
+| `<leader>wH/J/K/L` | Move window position left/down/up/right |
+| `<leader>ww` | Cycle to next window |
+
+### LSP (active when LSP attaches)
+
+| Binding | Action |
+|---------|--------|
+| `grn` | Rename symbol |
+| `gra` | Code actions |
+| `grr` | References |
+| `gri` | Implementations |
+| `grd` | Go to definition |
+| `grD` | Go to declaration |
+| `gO` | Document symbols |
+| `gW` | Workspace symbols |
+| `grt` | Type definition |
+| `<leader>ih` | Toggle inlay hints |
+
 ### General
 
 | Binding | Action |
 |---------|--------|
-| `<leader>y` | Yank to system clipboard |
-| `<leader>Y` | Yank line to system clipboard |
+| `<leader>y` / `Y` | Yank to system clipboard |
 | `<leader>d` | Delete to void register |
 | `<leader>f` | Format buffer |
 | `<leader>u` | Toggle undo tree |
 | `<leader>t` | Toggle file tree |
-| `<leader>.` | Open scratch buffer |
+| `<leader>.` | Toggle scratch buffer (use this to close, not `:q`) |
+| `<leader>>` | Select from saved scratch buffers |
 | `<leader>n` | Notification history |
-
-### Harpoon
-
-| Binding | Action |
-|---------|--------|
-| `<leader>a` | Add current file to harpoon |
-| `<leader>e` | Open harpoon menu (reorder/remove) |
+| `<leader>a` | Add file to harpoon |
+| `<leader>e` | Open harpoon menu |
 | `<leader>1-4` | Jump to harpoon file 1-4 |
 
-### Flash
+### Motion (Flash)
 
 | Binding | Action |
 |---------|--------|
@@ -95,84 +184,6 @@ Flash also auto-labels matches during `/` search, so you can jump to any result 
 | Delete surrounding | `ds{char}` | `ds(` removes surrounding parens |
 
 Works with `()`, `[]`, `{}`, `""`, `''`, `` ` ` ``, HTML tags (`t`), and more.
-
-### Diagnostics (Trouble)
-
-| Binding | Action |
-|---------|--------|
-| `<leader>xx` | Project-wide diagnostics |
-| `<leader>xd` | Current buffer diagnostics |
-| `<leader>xq` | Quickfix list |
-
-### Windows
-
-| Binding | Action |
-|---------|--------|
-| `<leader>wv` | Vertical split (side-by-side) |
-| `<leader>ws` | Horizontal split |
-| `<leader>wd` | Close window |
-| `<leader>wo` | Close all other windows |
-| `<leader>w=` | Balance window sizes |
-| `<C-h/j/k/l>` | Move focus left/down/up/right |
-| `<leader>wH/J/K/L` | Move window position left/down/up/right |
-| `<leader>ww` | Cycle to next window |
-
-### Telescope (Search)
-
-| Binding | Action |
-|---------|--------|
-| `<leader>sf` | Find files |
-| `<leader>sg` | Live grep |
-| `<leader>sw` | Grep current word |
-| `<leader>sh` | Help tags |
-| `<leader>sk` | Keymaps |
-| `<leader>sd` | Diagnostics |
-| `<leader>sr` | Resume last search |
-| `<leader>s.` | Recent files |
-| `<leader><leader>` | Open buffers |
-
-### LSP
-
-| Binding | Action |
-|---------|--------|
-| `grn` | Rename symbol |
-| `gra` | Code actions |
-| `grr` | References |
-| `gri` | Implementations |
-| `grd` | Go to definition |
-| `grD` | Go to declaration |
-| `gO` | Document symbols |
-| `gW` | Workspace symbols |
-| `grt` | Type definition |
-| `<leader>ih` | Toggle inlay hints |
-
-### Git Hunks
-
-| Binding | Action |
-|---------|--------|
-| `]c` | Next hunk |
-| `[c` | Previous hunk |
-| `<leader>hs` | Stage hunk (normal + visual) |
-| `<leader>hr` | Reset hunk (normal + visual) |
-| `<leader>hS` | Stage buffer |
-| `<leader>hu` | Undo stage hunk |
-| `<leader>hR` | Reset buffer |
-| `<leader>hp` | Preview hunk |
-| `<leader>hb` | Blame line |
-| `<leader>hd` | Diff against index |
-
-### Diff View
-
-| Binding | Action |
-|---------|--------|
-| `<leader>gd` | Open diff view (working tree vs index) |
-| `<leader>gh` | File history for current file |
-| `zo` | Expand folded unchanged region |
-| `zR` | Expand all folds (show full file) |
-| `zM` | Collapse all folds (show hunks only) |
-| `zc` | Collapse fold under cursor |
-
-Also supports `:DiffviewOpen main..HEAD` to diff against a branch. Close with `:DiffviewClose`.
 
 ## Hard Reset
 
@@ -200,3 +211,13 @@ LSP servers and formatters are auto-installed via Mason on first launch.
 | YAML | yamlls | prettier |
 
 Additional LSP servers can be added in `lua/danielyuan/lazy/lsp.lua`.
+
+## Per-Project Format on Save
+
+Format-on-save is disabled by default. To enable it for a specific project, create a `.nvim.lua` file in the project root:
+
+```lua
+vim.g.format_on_save = true
+```
+
+This uses neovim's built-in `exrc` feature to load `.nvim.lua` from the project directory. The file is globally gitignored via `~/.config/git/ignore`, so it won't show up in any repo's `git status`.
