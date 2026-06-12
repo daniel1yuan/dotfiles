@@ -56,9 +56,9 @@ These must be installed before first launch:
 ## Key Bindings
 
 Bindings are organized by three mental models:
-- **`g` = git (repo-level)** — status, blame, log, diffs
-- **`h` = hunks (change-level)** — staging, resetting, previewing individual changes
-- **`s` = search** — finding things via telescope
+- **`g` = git (repo-level)**, status, blame, log, diffs
+- **`h` = hunks (change-level)**, staging, resetting, previewing individual changes
+- **`s` = search**, finding things via telescope
 
 Within groups, letters stay consistent where possible: `s` = the main action, `b/B` = blame, `d` = diff/diagnostics, `r` = reset/resume. Capital = bigger version (`h` file history → `H` repo history, `b` blame line → `B` toggle blame).
 

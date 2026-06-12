@@ -31,10 +31,7 @@ return {
 
         -- Highlight references of the word under cursor on CursorHold
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if
-          client
-          and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
-        then
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
           local highlight_augroup = vim.api.nvim_create_augroup("kickstart-lsp-highlight", { clear = false })
           vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
             buffer = event.buf,
@@ -57,11 +54,8 @@ return {
           })
         end
 
-        -- Inlay hints displace code, so they're off by default — toggle with <leader>ih
-        if
-          client
-          and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf)
-        then
+        -- Inlay hints displace code, so they're off by default, toggle with <leader>ih
+        if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
           map("<leader>ih", function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
           end, "Toggle [I]nlay [H]ints")
@@ -89,6 +83,11 @@ return {
 
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
+    local function has(bin)
+      return vim.fn.executable(bin) == 1
+    end
+
+    -- Core servers: no language runtime required (lua_ls ships as a binary).
     local servers = {
       lua_ls = {
         settings = {
@@ -99,8 +98,15 @@ return {
           },
         },
       },
-      pyright = {},
-      vue_ls = {
+    }
+
+    local ensure_installed = { "stylua" }
+
+    -- Language-dependent servers: only configured when the runtime is
+    -- installed, since Mason installs/runs them via that runtime.
+    -- Install node + python with: sh packages/runtimes.sh (then reopen nvim).
+    if has("node") then
+      servers.vue_ls = {
         init_options = {
           typescript = {
             -- Use the TS bundled with vue-language-server so vue_ls doesn't
@@ -108,21 +114,29 @@ return {
             tsdk = vim.fn.stdpath("data") .. "/mason/packages/vue-language-server/node_modules/typescript/lib",
           },
         },
-      },
-      rust_analyzer = {},
-      gopls = {},
-      jsonls = {},
-      yamlls = {},
-    }
+      }
+      servers.jsonls = {}
+      servers.yamlls = {}
+      table.insert(ensure_installed, "prettier")
+    end
 
-    local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, {
-      "stylua",
-      "prettier",
-      "ruff",
-      "goimports",
+    -- pyright runs on node, so it needs both runtimes
+    if has("node") and (has("python3") or has("python")) then
+      servers.pyright = {}
+      table.insert(ensure_installed, "ruff")
+    end
+
+    if has("go") then
+      servers.gopls = {}
+      table.insert(ensure_installed, "goimports")
+    end
+
+    if has("cargo") then
+      servers.rust_analyzer = {}
       -- rustfmt is managed by rustup, not Mason: rustup component add rustfmt
-    })
+    end
+
+    vim.list_extend(ensure_installed, vim.tbl_keys(servers))
     require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
     require("mason-lspconfig").setup({

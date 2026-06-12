@@ -19,6 +19,10 @@ age
 # Development
 htop
 yq
+# NOTE: lazygit is only in apt on newer Ubuntu releases. If it gets skipped,
+# install via mise instead:
+#   mise use -g lazygit@latest
+lazygit
 
 # NOTE: mise is not in apt. Install via its install script:
 #   curl https://mise.run | sh
@@ -29,7 +33,11 @@ yq
 
 # Build tools (treesitter parser compilation)
 build-essential
+# NOTE: the tree-sitter CLI (required by nvim-treesitter's main branch) is not
+# in apt. Install via mise:
+#   mise use -g tree-sitter@latest
 
-# NOTE: neovim is not included — Ubuntu's apt repo ships an outdated version.
-# Install neovim 0.11+ separately via AppImage or the unstable PPA:
-#   https://github.com/neovim/neovim/blob/master/INSTALL.md#ubuntu
+# NOTE: neovim is not included. Ubuntu's apt repo ships an outdated version,
+# and the nvim config needs 0.12+ (nvim-treesitter main branch). Install the
+# latest stable release to ~/.local with:
+#   sh packages/nvim.sh

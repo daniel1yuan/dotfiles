@@ -1,4 +1,3 @@
 **/*secret.*
 zsh/zsh.d/*custom.*
-nvim/lazy-lock.json
 nvim/spell/*.spl

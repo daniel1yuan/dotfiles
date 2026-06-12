@@ -8,8 +8,10 @@ Personal dotfiles for zsh, neovim, kitty, and starship. XDG-compliant where poss
 |------|--------|-------------|
 | **zsh** | `zsh/` | Shell with [antidote](https://antidote.sh/) plugins, modular config via `zsh.d/` |
 | **neovim** | `nvim/` | Editor with [lazy.nvim](https://github.com/folke/lazy.nvim) plugins, LSP, treesitter, telescope |
-| **kitty** | `kitty/` | Terminal emulator with custom keybindings and theme |
+| **kitty** | `kitty/` | Terminal emulator (optional) with custom keybindings and theme |
+| **ghostty** | `ghostty/` | Terminal emulator (optional), mirrors the kitty setup |
 | **starship** | `starship/` | Minimal cross-shell prompt (directory, git, command duration) |
+| **lazygit** | `lazygit/` | Git TUI with catppuccin theme, opens in nvim via `<leader>gg` |
 | **mise** | via zsh | Runtime version manager for node, python, go |
 | **secrets** | `secrets/` | Secrets management with [sops](https://github.com/getsops/sops) + [age](https://github.com/FiloSottile/age) (optional) |
 
@@ -23,6 +25,7 @@ Personal dotfiles for zsh, neovim, kitty, and starship. XDG-compliant where poss
 | eza | ls replacement with git status, icons, tree view |
 | zoxide | Smarter cd. `z dot` jumps to ~/Projects/dotfiles |
 | ripgrep | Fast recursive grep. Powers telescope live grep |
+| lazygit | Terminal UI for git. `lg` in the shell, `<leader>gg` in nvim |
 
 ## Setup
 
@@ -35,6 +38,14 @@ sh install.sh -f
 ```
 
 ### 2. Install runtimes
+
+Neovim's language-dependent LSPs (typescript, vue, json/yaml, pyright, ruff) only activate when their runtime is installed. To install node + python (and mise itself, if missing) in one step:
+
+```sh
+sh packages/runtimes.sh
+```
+
+Then reopen nvim and Mason installs the servers automatically. Or install runtimes individually:
 
 ```sh
 mise use -g node@lts
@@ -97,6 +108,8 @@ The secrets directory syncs manually across machines (same as your KeePass db). 
 dotfiles/
 ├── packages/
 │   ├── install.sh       # OS-aware package installer
+│   ├── runtimes.sh      # node + python via mise (enables nvim LSPs)
+│   ├── nvim.sh          # latest stable neovim to ~/.local (Linux)
 │   ├── Brewfile         # macOS packages
 │   └── apt.txt          # Ubuntu/Debian packages
 ├── zsh/
@@ -106,6 +119,8 @@ dotfiles/
 │   └── zsh.d/           → ~/.config/zsh/zsh.d/
 ├── nvim/                → ~/.config/nvim/
 ├── kitty/               → ~/.config/kitty/
+├── ghostty/             → ~/.config/ghostty/
+├── lazygit/             → ~/.config/lazygit/
 ├── starship/
 │   └── starship.toml    → ~/.config/starship.toml
 ├── secrets/
