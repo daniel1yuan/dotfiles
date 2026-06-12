@@ -1,4 +1,7 @@
-export ZDOTDIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
+# Pin XDG config explicitly so tools that default elsewhere on macOS
+# (e.g. lazygit's ~/Library/Application Support) read ~/.config instead
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 
 # mise shims for non-interactive shells (CI, Claude Code, scripts).
 # Interactive shells get full activation in env.zsh instead.

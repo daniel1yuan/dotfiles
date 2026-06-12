@@ -45,8 +45,8 @@ Initialized in `env.zsh`. Install via `sh packages/install.sh` (handles macOS an
 ## Runtime Management (mise)
 
 [mise](https://mise.jdx.dev/) manages runtime versions (node, python, go). Two-layer activation:
-- **`.zshenv`** — Shims mode. Tools available in all shells, including non-interactive (CI, Claude Code, scripts).
-- **`env.zsh`** — Full activation for interactive shells. Dynamic version switching, env vars from `mise.toml`.
+- **`.zshenv`**. Shims mode. Tools available in all shells, including non-interactive (CI, Claude Code, scripts).
+- **`env.zsh`**. Full activation for interactive shells. Dynamic version switching, env vars from `mise.toml`.
 
 Install runtimes with `mise use -g node@lts`, `mise use -g python@3.12`, etc. Per-project versions via `mise.toml` or `.tool-versions` in the project root.
 
@@ -61,6 +61,7 @@ Install runtimes with `mise use -g node@lts`, `mise use -g python@3.12`, etc. Pe
 | `cmain` | `git checkout main` |
 | `pmain` | `git pull origin main` |
 | `reload` | Re-source `.zshrc` |
+| `lg` | `lazygit` |
 | `kssh` | SSH with kitty terminfo support |
 | `ls` | `eza` with icons, directories first |
 | `ll` | `eza` long listing with git status |

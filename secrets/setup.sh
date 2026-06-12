@@ -2,7 +2,7 @@
 # Secrets infrastructure setup
 #
 # Creates the ~/.secrets/ directory structure and generates an age key
-# for use with sops. Safe to run multiple times — never overwrites existing
+# for use with sops. Safe to run multiple times, never overwrites existing
 # files or directories.
 #
 # Usage:
@@ -78,7 +78,7 @@ log ""
 # --- Age key generation ---
 
 if [ -f "$AGE_KEY_FILE" ]; then
-  log "Age key already exists — not overwriting."
+  log "Age key already exists, not overwriting."
   PUBLIC_KEY=$(grep -o 'age1[a-z0-9]*' "$AGE_KEY_FILE" | head -1)
   log "  Public key: $PUBLIC_KEY"
 else
@@ -98,7 +98,7 @@ log ""
 # --- .sops.yaml ---
 
 if [ -f "$SOPS_CONFIG" ]; then
-  log ".sops.yaml already exists — not overwriting."
+  log ".sops.yaml already exists, not overwriting."
   log "  To add this machine's key, edit $SOPS_CONFIG"
   log "  and add the public key above to the age recipients list."
 else
@@ -125,7 +125,9 @@ log ""
 
 # --- Next steps ---
 
-log "SOPS_AGE_KEY_FILE and SOPS_CONFIG are already exported in the dotfiles zsh config."
+log "The zsh helpers (secrets-edit, secrets-show, auto-sourcing) pass the age key"
+log "and sops config per-invocation. Nothing is exported globally, so other sops"
+log "usage on this machine is unaffected."
 log ""
 log "Next steps (reload your shell first):"
 log "  1. Create your first encrypted env file:"

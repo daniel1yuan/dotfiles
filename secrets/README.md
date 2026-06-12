@@ -84,12 +84,18 @@ All `.env` files in `~/.secrets/env/` are automatically sourced at shell startup
 
 ### Environment variables
 
-These are exported in the dotfiles zsh config so sops knows where to find things:
+The age key and sops config paths are passed to sops **per-invocation** by the zsh helpers (`secrets-edit`, `secrets-show`, and the auto-sourcing loop). They are deliberately NOT exported globally, so other sops usage on the machine (work repos with their own `.sops.yaml` or key material) is unaffected by this setup.
 
-| Variable            | Value                     | Purpose                                 |
+| Setting             | Value                     | Purpose                                 |
 | ------------------- | ------------------------- | --------------------------------------- |
 | `SOPS_AGE_KEY_FILE` | `~/.secrets/age/keys.txt` | Tells sops where the age private key is |
-| `SOPS_CONFIG`       | `~/.secrets/.sops.yaml`   | Tells sops where the creation rules are |
+| `--config`          | `~/.secrets/.sops.yaml`   | Tells sops where the creation rules are |
+
+If you run `sops` manually against `~/.secrets/` files, pass these yourself:
+
+```sh
+SOPS_AGE_KEY_FILE=~/.secrets/age/keys.txt sops --config ~/.secrets/.sops.yaml updatekeys ~/.secrets/env/global.env
+```
 
 ## Adding a new machine
 
