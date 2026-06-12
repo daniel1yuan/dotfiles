@@ -4,41 +4,19 @@ eza
 fd-find
 ripgrep
 zoxide
-# NOTE: fzf may be outdated in the bundled apt versions. Install with mise after removing it if it is
-#  mise use -g fzf@latest
-fzf
-# NOTE: Starship only in apt on Ubuntu 25.04+ . Install using its install script
-#   curl -sS https://starship.rs/install.sh | sh
-starship
 
 # Secrets management
-# NOTE: sops is not in apt. Install via mise:
-#   mise use -g sops@latest
 age
 
 # Development
 htop
 yq
-# NOTE: lazygit and git-delta are only in apt on newer Ubuntu releases. If
-# they get skipped, install via mise instead:
-#   mise use -g lazygit@latest delta@latest
-lazygit
-git-delta
 
-# NOTE: mise is not in apt. Install via its install script:
-#   curl https://mise.run | sh
-# Then use mise to install node, python, go, etc.
-
-# NOTE: uv (Python package manager) is not in apt. Install via:
-#   curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Build tools (treesitter parser compilation)
+# Build tools (treesitter parser compilation) and font install
 build-essential
-# NOTE: the tree-sitter CLI (required by nvim-treesitter's main branch) is not
-# in apt. Install via mise:
-#   mise use -g tree-sitter@latest
+unzip
 
-# NOTE: neovim is not included. Ubuntu's apt repo ships an outdated version,
-# and the nvim config needs 0.12+ (nvim-treesitter main branch). Install the
-# latest stable release to ~/.local with:
-#   sh packages/nvim.sh
+# NOTE: tools that apt ships too old or not at all (starship, fzf, sops,
+# lazygit, git-delta, tree-sitter, uv) are installed via mise instead;
+# see packages/mise.txt. neovim is installed via packages/nvim.sh.
+# packages/install.sh handles all of this automatically.

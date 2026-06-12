@@ -32,31 +32,21 @@ Personal dotfiles for zsh, neovim, kitty, and starship. XDG-compliant where poss
 
 ### 1. Install dotfiles
 
-Installs packages, checks dependencies, and symlinks configs:
+One command bootstraps everything, regardless of system:
 
 ```sh
 sh install.sh -f
 ```
 
-### 2. Install runtimes
+This installs OS packages (brew/apt), mise and the CLI tools apt can't provide, neovim 0.12+, node + python runtimes (which activate the nvim LSPs), the Nerd Font, symlinks all configs, and migrates any existing `~/.gitconfig` to `~/.gitconfig.local`. Steps that can't run (no sudo, no brew) warn and continue. Safe to re-run any time.
 
-Neovim's language-dependent LSPs (typescript, vue, json/yaml, pyright, ruff) only activate when their runtime is installed. To install node + python (and mise itself, if missing) in one step:
+### 2. Optional extras
 
-```sh
-sh packages/runtimes.sh
-```
-
-Then reopen nvim and Mason installs the servers automatically. Or install runtimes individually:
+Go and Rust aren't installed by default; their nvim LSPs activate when the runtime exists:
 
 ```sh
-mise use -g node@lts
-mise use -g python@3.12
 mise use -g go@latest
-```
-
-Rust is managed separately via [rustup](https://www.rust-lang.org/tools/install):
-```sh
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh   # rust, via rustup
 ```
 
 ### 3. Options
@@ -108,11 +98,11 @@ The secrets directory syncs manually across machines (same as your KeePass db). 
 ```
 dotfiles/
 ├── packages/
-│   ├── install.sh       # OS-aware package installer
-│   ├── runtimes.sh      # node + python via mise (enables nvim LSPs)
+│   ├── install.sh       # OS-aware bootstrap: packages, mise, nvim, runtimes, fonts
 │   ├── nvim.sh          # latest stable neovim to ~/.local (Linux)
 │   ├── Brewfile         # macOS packages
-│   └── apt.txt          # Ubuntu/Debian packages
+│   ├── apt.txt          # Ubuntu/Debian packages
+│   └── mise.txt         # CLI tools via mise on Linux (apt too old/missing)
 ├── zsh/
 │   ├── .zshenv          → ~/.zshenv
 │   ├── .zshrc           → ~/.config/zsh/.zshrc

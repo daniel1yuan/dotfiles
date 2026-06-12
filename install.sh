@@ -11,6 +11,9 @@
 
 set -e
 
+# Tools the package step installs (mise, nvim) land in these
+PATH="$HOME/.local/bin:$HOME/.local/share/mise/shims:$PATH"
+
 HOME_DIR="$HOME"
 CONFIG_DIR="$HOME/.config"
 WORKING_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -78,7 +81,7 @@ starship/starship.toml:$CONFIG_DIR/starship.toml
 # Terminal emulators (kitty/ghostty) are optional: configs are symlinked
 # regardless, and whichever terminal is installed picks its config up.
 REQUIRED_TOOLS="git zsh nvim"
-OPTIONAL_TOOLS="mise fzf fd bat eza zoxide rg starship kitty ghostty lazygit"
+OPTIONAL_TOOLS="mise fzf fd bat eza zoxide rg starship kitty ghostty lazygit delta sops age node python3"
 
 check_deps() {
   log "Checking dependencies..."
@@ -219,11 +222,18 @@ if [ $FORCE -eq 1 ]; then
   log "Force mode, existing files will be backed up to $BACKUP_DIR"
 fi
 
-# Step 1: Install packages
-if [ $SKIP_PACKAGES -eq 0 ] && [ $DRY_RUN -eq 0 ]; then
+# Step 1: Install packages (warn and continue on failure; a machine without
+# sudo or brew should still get its symlinks)
+if [ $SKIP_PACKAGES -eq 0 ]; then
   log ""
-  log "Step 1: Installing packages..."
-  sh "$WORKING_DIR/packages/install.sh"
+  if [ $DRY_RUN -eq 1 ]; then
+    log "Step 1: Would install packages (sh packages/install.sh)"
+  else
+    log "Step 1: Installing packages..."
+    if ! sh "$WORKING_DIR/packages/install.sh"; then
+      log "Package installation had errors; continuing with symlinks."
+    fi
+  fi
   log ""
 fi
 
@@ -250,6 +260,25 @@ for entry in $LINKS; do
     link "$source" "$target"
   fi
 done
+
+# Step 4: Migrate ~/.gitconfig. Git reads it after the symlinked
+# ~/.config/git/config, so a leftover ~/.gitconfig silently overrides the
+# dotfiles. Machine-specific settings belong in ~/.gitconfig.local, which
+# the dotfiles config includes last.
+if [ -f "$HOME_DIR/.gitconfig" ]; then
+  log ""
+  log "Step 4: Migrating ~/.gitconfig..."
+  if [ -f "$HOME_DIR/.gitconfig.local" ]; then
+    log "  [warn] Both ~/.gitconfig and ~/.gitconfig.local exist."
+    log "         Merge ~/.gitconfig into ~/.gitconfig.local and delete it,"
+    log "         or it will override the dotfiles git config."
+  elif [ $DRY_RUN -eq 1 ]; then
+    log "  [move] ~/.gitconfig -> ~/.gitconfig.local (dry run)"
+  else
+    mv "$HOME_DIR/.gitconfig" "$HOME_DIR/.gitconfig.local"
+    log "  [move] ~/.gitconfig -> ~/.gitconfig.local"
+  fi
+fi
 
 log ""
 log "Done. Restart your shell to apply changes."

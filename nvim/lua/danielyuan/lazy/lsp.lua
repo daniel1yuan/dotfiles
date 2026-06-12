@@ -104,7 +104,8 @@ return {
 
     -- Language-dependent servers: only configured when the runtime is
     -- installed, since Mason installs/runs them via that runtime.
-    -- Install node + python with: sh packages/runtimes.sh (then reopen nvim).
+    -- The dotfiles install.sh installs node + python via mise; reopen
+    -- nvim after they appear and Mason picks these up.
     if has("node") then
       servers.vue_ls = {
         init_options = {

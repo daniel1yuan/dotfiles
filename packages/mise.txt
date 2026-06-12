@@ -1,0 +1,10 @@
+# CLI tools installed via mise on Linux, where apt versions are missing or
+# too old (fzf needs 0.48+ for `fzf --zsh`, sops/lazygit/delta aren't packaged
+# everywhere). macOS gets these from the Brewfile instead.
+starship@latest
+fzf@latest
+sops@latest
+lazygit@latest
+delta@latest
+tree-sitter@latest
+uv@latest
