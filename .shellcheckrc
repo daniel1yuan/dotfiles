@@ -1,0 +1,3 @@
+# 'local' is supported by every sh these scripts target (dash, bash, zsh),
+# even though POSIX doesn't define it
+disable=SC3043

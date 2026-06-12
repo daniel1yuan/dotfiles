@@ -26,6 +26,7 @@ detect_os() {
 install_macos() {
   if ! command -v brew >/dev/null 2>&1; then
     echo "Homebrew not found. Install it first:"
+    # shellcheck disable=SC2016 # printing a literal command, not expanding it
     echo '  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
     exit 1
   fi
@@ -64,6 +65,7 @@ install_debian() {
   fi
 
   echo "Installing packages via apt..."
+  # shellcheck disable=SC2086 # word splitting of the package list is intended
   sudo apt install -y $available
 
   # fd and bat ship under different binary names on Debian/Ubuntu
@@ -93,7 +95,7 @@ case "$OS" in
     ;;
   linux-unknown)
     echo "Unsupported Linux distribution. Only Debian/Ubuntu is supported."
-    echo "Install packages manually — see packages/apt.txt for the list."
+    echo "Install packages manually, see packages/apt.txt for the list."
     exit 1
     ;;
   *)

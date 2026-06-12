@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: shellcheck
+        run: shellcheck install.sh packages/*.sh secrets/setup.sh
+
+      - name: zsh syntax check
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq zsh
+          for f in zsh/.zshenv zsh/.zshrc zsh/zsh.d/*.zsh; do
+            zsh -n "$f" && echo "OK $f"
+          done
+
+      - name: stylua check
+        uses: JohnnyMorganz/stylua-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          version: latest
+          args: --check nvim/
+
+  dry-run:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Provide the required tools (git/zsh/nvim); versions don't matter
+      # for a dry run, only that the dependency check passes.
+      - name: install required tools (linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq zsh neovim
+
+      - name: install required tools (macos)
+        if: runner.os == 'macOS'
+        run: brew install neovim
+
+      - name: install.sh --dry-run
+        run: sh install.sh --dry-run --skip-packages
