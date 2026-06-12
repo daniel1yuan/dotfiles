@@ -17,8 +17,33 @@ return {
     },
   },
   keys = {
-    { "<leader>.", function() Snacks.scratch() end, desc = "Toggle scratch buffer" },
-    { "<leader>>", function() Snacks.scratch.select() end, desc = "Select scratch buffer" },
-    { "<leader>n", function() Snacks.notifier.show_history() end, desc = "Notification history" },
+    {
+      "<leader>gg",
+      function()
+        Snacks.lazygit()
+      end,
+      desc = "Lazygit",
+    },
+    {
+      "<leader>.",
+      function()
+        Snacks.scratch()
+      end,
+      desc = "Toggle scratch buffer",
+    },
+    {
+      "<leader>>",
+      function()
+        Snacks.scratch.select()
+      end,
+      desc = "Select scratch buffer",
+    },
+    {
+      "<leader>n",
+      function()
+        Snacks.notifier.show_history()
+      end,
+      desc = "Notification history",
+    },
   },
 }

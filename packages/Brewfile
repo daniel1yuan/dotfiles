@@ -12,6 +12,7 @@ brew "mise"          # Manages node, python, go, and other runtimes
 brew "uv"            # Fast Python package manager
 
 # Development
+brew "lazygit"      # Terminal UI for git: staging, rebase, branch surgery
 brew "neovim"
 brew "tree-sitter"
 brew "tree-sitter-cli"
