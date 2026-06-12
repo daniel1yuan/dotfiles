@@ -23,7 +23,7 @@ Prompt is [starship](https://starship.rs/), initialized in `env.zsh`. Config liv
 
 | File | Contents |
 |------|----------|
-| `alias.zsh` | Git aliases (`gs`, `gc`, `gp`), navigation, reload |
+| `alias.zsh` | Aliases, secrets helpers, modern CLI replacements |
 | `env.zsh` | Editor, PATH, prompt theme, mise activation, tool config |
 | `functions.zsh` | Encryption/decryption, `pruneBranches`, `pullHead`, `kssh` |
 | `*custom.*` | Machine-specific config (gitignored) |
@@ -54,12 +54,6 @@ Install runtimes with `mise use -g node@lts`, `mise use -g python@3.12`, etc. Pe
 
 | Alias | Command |
 |-------|---------|
-| `gs` | `git status` |
-| `gc` | `git checkout` |
-| `gp` | `git pull` |
-| `gph` | `git pull origin HEAD` |
-| `cmain` | `git checkout main` |
-| `pmain` | `git pull origin main` |
 | `reload` | Re-source `.zshrc` |
 | `lg` | `lazygit` |
 | `kssh` | SSH with kitty terminfo support |

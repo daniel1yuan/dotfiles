@@ -1,0 +1,53 @@
+# Git configuration (symlinked to ~/.config/git/config)
+#
+# Machine-specific settings (identity, credential helpers, work overrides)
+# live in ~/.gitconfig.local, which is not tracked. Note: a plain ~/.gitconfig
+# would silently override everything here since git reads it after this file;
+# keep machine config in ~/.gitconfig.local instead.
+
+[include]
+	# Delta colors: https://github.com/catppuccin/delta (vendored)
+	path = catppuccin.gitconfig
+
+[init]
+	defaultBranch = main
+
+[push]
+	# Plain `git push` creates the upstream branch on first push
+	autoSetupRemote = true
+
+[pull]
+	rebase = true
+
+[fetch]
+	prune = true
+
+[rerere]
+	# Remember and replay conflict resolutions
+	enabled = true
+
+[branch]
+	sort = -committerdate
+
+[diff]
+	algorithm = histogram
+	colorMoved = default
+
+[merge]
+	# Conflict markers include the common ancestor
+	conflictStyle = zdiff3
+
+[core]
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	line-numbers = true
+	features = catppuccin-mocha
+
+# Last so machine settings win over the defaults above
+[include]
+	path = ~/.gitconfig.local

@@ -12,6 +12,7 @@ brew "mise"          # Manages node, python, go, and other runtimes
 brew "uv"            # Fast Python package manager
 
 # Development
+brew "git-delta"    # Syntax-highlighted pager for git diff/log, used by lazygit
 brew "lazygit"      # Terminal UI for git: staging, rebase, branch surgery
 brew "neovim"
 brew "tree-sitter"

@@ -19,10 +19,11 @@ age
 # Development
 htop
 yq
-# NOTE: lazygit is only in apt on newer Ubuntu releases. If it gets skipped,
-# install via mise instead:
-#   mise use -g lazygit@latest
+# NOTE: lazygit and git-delta are only in apt on newer Ubuntu releases. If
+# they get skipped, install via mise instead:
+#   mise use -g lazygit@latest delta@latest
 lazygit
+git-delta
 
 # NOTE: mise is not in apt. Install via its install script:
 #   curl https://mise.run | sh

@@ -68,6 +68,7 @@ zsh/zsh.d:$CONFIG_DIR/zsh/zsh.d
 nvim:$CONFIG_DIR/nvim
 kitty:$CONFIG_DIR/kitty
 ghostty:$CONFIG_DIR/ghostty
+git:$CONFIG_DIR/git
 lazygit:$CONFIG_DIR/lazygit
 starship/starship.toml:$CONFIG_DIR/starship.toml
 "

@@ -12,6 +12,7 @@ Personal dotfiles for zsh, neovim, kitty, and starship. XDG-compliant where poss
 | **ghostty** | `ghostty/` | Terminal emulator (optional), mirrors the kitty setup |
 | **starship** | `starship/` | Minimal cross-shell prompt (directory, git, command duration) |
 | **lazygit** | `lazygit/` | Git TUI with catppuccin theme, opens in nvim via `<leader>gg` |
+| **git** | `git/` | Sane defaults (rebase pulls, rerere, zdiff3) with [delta](https://github.com/dandavison/delta) diffs. Identity lives in `~/.gitconfig.local` per machine |
 | **mise** | via zsh | Runtime version manager for node, python, go |
 | **secrets** | `secrets/` | Secrets management with [sops](https://github.com/getsops/sops) + [age](https://github.com/FiloSottile/age) (optional) |
 
@@ -120,6 +121,7 @@ dotfiles/
 ├── nvim/                → ~/.config/nvim/
 ├── kitty/               → ~/.config/kitty/
 ├── ghostty/             → ~/.config/ghostty/
+├── git/                 → ~/.config/git/
 ├── lazygit/             → ~/.config/lazygit/
 ├── starship/
 │   └── starship.toml    → ~/.config/starship.toml
