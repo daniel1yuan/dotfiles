@@ -67,13 +67,17 @@ zsh/zsh_plugins.txt:$CONFIG_DIR/zsh/zsh_plugins.txt
 zsh/zsh.d:$CONFIG_DIR/zsh/zsh.d
 nvim:$CONFIG_DIR/nvim
 kitty:$CONFIG_DIR/kitty
+ghostty:$CONFIG_DIR/ghostty
+lazygit:$CONFIG_DIR/lazygit
 starship/starship.toml:$CONFIG_DIR/starship.toml
 "
 
 # --- Dependency validation ---
 
-REQUIRED_TOOLS="git zsh nvim kitty"
-OPTIONAL_TOOLS="mise fzf fd bat eza zoxide rg starship"
+# Terminal emulators (kitty/ghostty) are optional: configs are symlinked
+# regardless, and whichever terminal is installed picks its config up.
+REQUIRED_TOOLS="git zsh nvim"
+OPTIONAL_TOOLS="mise fzf fd bat eza zoxide rg starship kitty ghostty lazygit"
 
 check_deps() {
   log "Checking dependencies..."
@@ -179,7 +183,7 @@ unlink() {
 
 if [ $UNINSTALL -eq 1 ]; then
   if [ $DRY_RUN -eq 1 ]; then
-    log "Dry run — no changes will be made"
+    log "Dry run, no changes will be made"
   fi
   log "Removing dotfile symlinks..."
   log "  Home:   $HOME_DIR"
@@ -207,11 +211,11 @@ fi
 # --- Install ---
 
 if [ $DRY_RUN -eq 1 ]; then
-  log "Dry run — no changes will be made"
+  log "Dry run, no changes will be made"
 fi
 
 if [ $FORCE -eq 1 ]; then
-  log "Force mode — existing files will be backed up to $BACKUP_DIR"
+  log "Force mode, existing files will be backed up to $BACKUP_DIR"
 fi
 
 # Step 1: Install packages

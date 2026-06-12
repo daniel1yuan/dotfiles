@@ -5,7 +5,7 @@ Configuration for the kitty terminal emulator.
 ## Settings
 
 - **Font:** JetBrainsMono Nerd Font Mono
-- **Background:** #232323
+- **Theme:** Catppuccin Mocha (`catppuccin-mocha.conf`, vendored from [catppuccin/kitty](https://github.com/catppuccin/kitty))
 - **Scrollback:** 5000 lines
 - **Tab bar:** Separator style
 
