@@ -12,6 +12,9 @@ age
 htop
 yq
 
+# Inline image rendering in nvim markdown (snacks.image)
+imagemagick
+
 # Build tools (treesitter parser compilation) and font install
 build-essential
 unzip

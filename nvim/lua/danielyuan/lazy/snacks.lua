@@ -3,6 +3,9 @@ return {
   priority = 1000,
   lazy = false,
   opts = {
+    -- Renders images inline in markdown buffers. Needs a kitty graphics
+    -- protocol terminal (ghostty/kitty) and ImageMagick for non-PNG formats.
+    image = { enabled = true },
     indent = { enabled = true },
     notifier = { enabled = true, timeout = 5000 },
     scratch = { enabled = true },

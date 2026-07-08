@@ -15,6 +15,7 @@ These must be installed before first launch:
 | node/npm | LSP servers, typescript-tools | Via mise: `mise use -g node@lts` | Via mise: `mise use -g node@lts` |
 | C compiler | Treesitter parser compilation | `xcode-select --install` | `sudo apt install build-essential` |
 | JetBrainsMono Nerd Font | Icons and UI | See [kitty/README.md](../kitty/README.md) | See [kitty/README.md](../kitty/README.md) |
+| ImageMagick | Inline images in markdown (non-PNG formats) | `brew install imagemagick` | `sudo apt install imagemagick` |
 
 ## Core Settings
 
@@ -41,7 +42,8 @@ These must be installed before first launch:
 | diffview.nvim | File-by-file diff viewer and file history |
 | which-key | Keybind hints |
 | trouble.nvim | Diagnostics panel (project-wide and per-buffer) |
-| snacks.nvim | Dashboard, indent guides, notifications, scratch buffers |
+| snacks.nvim | Dashboard, indent guides, notifications, scratch buffers, inline images |
+| render-markdown.nvim | In-buffer markdown rendering (headings, tables, checkboxes, callouts) |
 | undotree | Undo history visualization |
 | todo-comments | Highlight TODO/FIXME/etc |
 | typescript-tools | TypeScript language support |
@@ -157,6 +159,7 @@ Diffview fold controls: `zo` expand, `zc` collapse, `zR` expand all, `zM` collap
 | `<leader>d` | Delete to void register |
 | `<leader>f` | Format buffer |
 | `<leader>u` | Toggle undo tree |
+| `<leader>m` | Toggle markdown rendering (markdown buffers only) |
 | `<leader>t` | Toggle file tree |
 | `<leader>.` | Toggle scratch buffer (use this to close, not `:q`) |
 | `<leader>>` | Select from saved scratch buffers |
@@ -184,6 +187,13 @@ Flash also auto-labels matches during `/` search, so you can jump to any result 
 | Delete surrounding | `ds{char}` | `ds(` removes surrounding parens |
 
 Works with `()`, `[]`, `{}`, `""`, `''`, `` ` ` ``, HTML tags (`t`), and more.
+
+## Markdown
+
+Markdown files render in-buffer, close to how GitHub/Forgejo display them:
+
+- **render-markdown.nvim** draws headings, tables, checkboxes, code blocks, and callouts (`> [!NOTE]` etc) in normal mode, and reverts to raw text on the line being edited in insert mode. Toggle with `<leader>m`.
+- **snacks.image** draws `![alt](path)` images inline, both local files and URLs. Requires a terminal with the kitty graphics protocol (ghostty and kitty both work) and ImageMagick for non-PNG formats.
 
 ## Hard Reset
 

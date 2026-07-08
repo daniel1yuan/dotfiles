@@ -24,6 +24,7 @@ brew "sops"
 
 # Utilities
 brew "htop"
+brew "imagemagick"  # Inline image rendering in nvim markdown (snacks.image)
 brew "mkcert"
 brew "nss"
 brew "yq"
