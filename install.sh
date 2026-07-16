@@ -68,6 +68,7 @@ zsh/.zshenv:$HOME_DIR/.zshenv
 zsh/.zshrc:$CONFIG_DIR/zsh/.zshrc
 zsh/zsh_plugins.txt:$CONFIG_DIR/zsh/zsh_plugins.txt
 zsh/zsh.d:$CONFIG_DIR/zsh/zsh.d
+zsh/KEYBINDINGS.md:$CONFIG_DIR/zsh/KEYBINDINGS.md
 nvim:$CONFIG_DIR/nvim
 kitty:$CONFIG_DIR/kitty
 ghostty:$CONFIG_DIR/ghostty

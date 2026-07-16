@@ -38,11 +38,8 @@ setopt HIST_IGNORE_ALL_DUPS   # drop older duplicates of repeated commands
 setopt HIST_IGNORE_SPACE      # commands starting with a space aren't saved
 setopt HIST_REDUCE_BLANKS
 
-# zsh-history-substring-search: type a prefix, then Up/Down to cycle matches
-bindkey '^[[A' history-substring-search-up
-bindkey '^[OA' history-substring-search-up
-bindkey '^[[B' history-substring-search-down
-bindkey '^[OB' history-substring-search-down
+# History substring search keybindings live in vim-mode.zsh (bound to both the
+# viins and vicmd keymaps so Up/Down search works in insert and command mode).
 
 # mise: full activation for interactive shells (dynamic version switching, env vars)
 # Shims fallback for non-interactive shells is in .zshenv
@@ -55,8 +52,26 @@ export FZF_ALT_C_COMMAND='fd --type d --hidden --follow --exclude .git'
 export FZF_CTRL_T_OPTS="--preview 'bat --color=always --line-range=:200 {}'"
 export FZF_ALT_C_OPTS="--preview 'eza --tree --level=1 --icons {}'"
 
+# fzf menu keys mirror the nvim (telescope/blink) scheme. FZF_DEFAULT_OPTS is read
+# on EVERY fzf invocation (Ctrl-R/T, Alt-C, the keys browser) and — via
+# use-fzf-default-opts in .zshrc — the fzf-tab completion menu too.
+# Ctrl-J/K and Ctrl-N/P navigation already work by default. This intentionally
+# overrides fzf's default Ctrl-U (clear-query); clear via Ctrl-A then Ctrl-K.
+export FZF_DEFAULT_OPTS="
+  --bind 'ctrl-y:accept'
+  --bind 'ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down'
+  --bind 'ctrl-b:preview-page-up,ctrl-f:preview-page-down'
+  --header '^Y accept · ^J/^K move · ^U/^D scroll'
+"
+
 # fzf keybindings and completion (Ctrl-R, Ctrl-T, Alt-C)
 (( $+commands[fzf] )) && source <(fzf --zsh)
+
+# fzf --zsh binds Tab (fzf-completion, the ** trigger) into whatever keymap is
+# `main` at source time, which varies with the inherited $EDITOR. Pin it so a
+# fresh terminal and a nested shell behave the same: Tab runs fzf-completion,
+# which falls through to the fzf-tab menu for anything but the ** trigger.
+(( $+commands[fzf] )) && bindkey -M viins '^I' fzf-completion
 
 # zoxide (smarter cd)
 (( $+commands[zoxide] )) && eval "$(zoxide init zsh)"
@@ -81,4 +96,3 @@ starship_transient_accept_line() {
 }
 
 zle -N accept-line starship_transient_accept_line
-

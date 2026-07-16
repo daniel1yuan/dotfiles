@@ -27,6 +27,8 @@ zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
 # (via antidote above), so it has to be enabled here, after compinit has run.
 if (( $+functions[enable-fzf-tab] )); then
   enable-fzf-tab
+  # Make the completion menu honor FZF_DEFAULT_OPTS (nvim-style keys + header).
+  zstyle ':fzf-tab:*' use-fzf-default-opts yes
   zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza --tree --level=1 --icons $realpath'
 fi
 

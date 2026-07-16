@@ -8,3 +8,6 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 if [[ ! -o interactive ]]; then
   eval "$(mise activate zsh --shims)" 2>/dev/null
 fi
+
+# rustup/cargo (only on machines where it's installed)
+[[ -f "$HOME/.cargo/env" ]] && . "$HOME/.cargo/env"
