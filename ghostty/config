@@ -1,10 +1,18 @@
 # @file: Ghostty Terminal Configuration File
 # @author: Daniel Yuan (daniel1yuan@gmail.com)
 
+# Start in fullscreen (set `maximize = true` instead to keep the titlebar)
+fullscreen = true
+
 # Other config
 # scrollback-limit is in bytes (~10MB roughly matches kitty's 5000 lines)
 scrollback-limit = 10000000
 confirm-close-surface = false
+
+# SSH integration: ssh-terminfo auto-installs xterm-ghostty terminfo on remote
+# hosts (needs `tic` remotely; result cached, see `ghostty +ssh-cache`);
+# ssh-env falls back to TERM=xterm-256color where that isn't possible.
+shell-integration-features = ssh-env,ssh-terminfo
 
 # Colors: Catppuccin Mocha (built into ghostty)
 theme = Catppuccin Mocha
@@ -13,19 +21,41 @@ theme = Catppuccin Mocha
 font-family = JetBrainsMono Nerd Font Mono
 
 # Key Bindings
+# Mac muscle memory: on macOS the built-in defaults already bind Cmd+T / Cmd+1-9
+# / Cmd+D / Cmd+Shift+D. There is no Cmd key on Linux, and GNOME claims most
+# Super combos, so Linux uses `alt` instead (it sits where Cmd does on a Mac
+# keyboard). Heads up: alt+<key> normally sends Meta to the shell, so these
+# shadow some readline keys (notably alt+d, usually delete-word).
 keybind = ctrl+shift+c=copy_to_clipboard
 keybind = ctrl+shift+v=paste_from_clipboard
 keybind = ctrl+shift+l=clear_screen
 
-# Split Navigation (hjkl)
-keybind = alt+h=goto_split:left
-keybind = alt+j=goto_split:down
-keybind = alt+k=goto_split:up
-keybind = alt+l=goto_split:right
+# New tab (Cmd+T on mac via defaults)
+keybind = alt+t=new_tab
 
-# Tab Bindings
+# Switch to tab N (Cmd+1-9 on mac via defaults)
 keybind = alt+1=goto_tab:1
 keybind = alt+2=goto_tab:2
 keybind = alt+3=goto_tab:3
 keybind = alt+4=goto_tab:4
 keybind = alt+5=goto_tab:5
+keybind = alt+6=goto_tab:6
+keybind = alt+7=goto_tab:7
+keybind = alt+8=goto_tab:8
+keybind = alt+9=goto_tab:9
+# macOS default maps Cmd+9 to last_tab; override for parity with alt+9
+keybind = super+9=goto_tab:9
+
+# New split (Cmd+D / Cmd+Shift+D on mac via defaults)
+keybind = alt+d=new_split:right
+keybind = alt+shift+d=new_split:down
+
+# Split navigation (hjkl): alt for Linux, super (Cmd) for macOS
+keybind = alt+h=goto_split:left
+keybind = alt+j=goto_split:down
+keybind = alt+k=goto_split:up
+keybind = alt+l=goto_split:right
+keybind = super+h=goto_split:left
+keybind = super+j=goto_split:down
+keybind = super+k=goto_split:up
+keybind = super+l=goto_split:right
