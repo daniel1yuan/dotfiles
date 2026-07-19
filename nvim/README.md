@@ -99,7 +99,9 @@ Diffview fold controls: `zo` expand, `zc` collapse, `zR` expand all, `zM` collap
 | Binding | Action |
 |---------|--------|
 | `<leader>sf` | Find files |
+| `<leader>sF` | Find files (including gitignored and hidden) |
 | `<leader>sg` | Live grep |
+| `<leader>sG` | Live grep (including gitignored and hidden) |
 | `<leader>sw` | Grep current word |
 | `<leader>sh` | Help tags |
 | `<leader>sk` | Keymaps |
@@ -112,6 +114,8 @@ Diffview fold controls: `zo` expand, `zc` collapse, `zR` expand all, `zM` collap
 | `<leader>sb` | Git branches |
 | `<leader>st` | TODOs |
 | `<leader><leader>` | Open buffers |
+
+`<leader>sF` and `<leader>sG` bypass `.gitignore` (for specs, drafts, and other untracked files) but still respect the always-ignore lists in [fd/ignore](../fd/ignore) and [ripgrep/config](../ripgrep/config), so `.git` and `node_modules` stay out of results.
 
 ### Diagnostics (`<leader>x`)
 
@@ -167,6 +171,8 @@ Diffview fold controls: `zo` expand, `zc` collapse, `zR` expand all, `zM` collap
 | `<leader>a` | Add file to harpoon |
 | `<leader>e` | Open harpoon menu |
 | `<leader>1-4` | Jump to harpoon file 1-4 |
+
+The file tree shows gitignored files (dimmed, with the `◌` git icon), except the always-hidden names in `filters.custom` (`.git`, `node_modules`). Inside the tree, `I` toggles gitignored files, `H` toggles dotfiles, and `U` toggles the always-hidden list.
 
 ### Motion (Flash)
 

@@ -13,6 +13,8 @@ Personal dotfiles for zsh, neovim, kitty, and starship. XDG-compliant where poss
 | **starship** | `starship/` | Minimal cross-shell prompt (directory, git, command duration) |
 | **lazygit** | `lazygit/` | Git TUI with catppuccin theme, opens in nvim via `<leader>gg` |
 | **git** | `git/` | Sane defaults (rebase pulls, rerere, zdiff3) with [delta](https://github.com/dandavison/delta) diffs. Identity lives in `~/.gitconfig.local` per machine |
+| **fd** | `fd/` | Global always-ignore list (`.git`, `node_modules`), kept even when searches bypass `.gitignore` |
+| **ripgrep** | `ripgrep/` | Same always-ignore globs for grep, loaded via `RIPGREP_CONFIG_PATH` |
 | **mise** | via zsh | Runtime version manager for node, python, go |
 | **secrets** | `secrets/` | Secrets management with [sops](https://github.com/getsops/sops) + [age](https://github.com/FiloSottile/age) (optional) |
 

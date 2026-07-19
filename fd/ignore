@@ -1,0 +1,7 @@
+# Global always-ignore list for fd, in gitignore syntax.
+# Applies even with --no-ignore-vcs (nvim's <leader>sF "search everything");
+# only a full --no-ignore bypasses it.
+# Sibling lists: ripgrep/config (grep) and filters.custom in
+# nvim/lua/danielyuan/lazy/nvim-tree.lua (file tree).
+.git/
+node_modules/

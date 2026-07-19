@@ -73,6 +73,8 @@ nvim:$CONFIG_DIR/nvim
 kitty:$CONFIG_DIR/kitty
 ghostty:$CONFIG_DIR/ghostty
 git:$CONFIG_DIR/git
+fd:$CONFIG_DIR/fd
+ripgrep:$CONFIG_DIR/ripgrep
 lazygit:$CONFIG_DIR/lazygit
 starship/starship.toml:$CONFIG_DIR/starship.toml
 "

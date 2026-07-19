@@ -45,6 +45,10 @@ setopt HIST_REDUCE_BLANKS
 # Shims fallback for non-interactive shells is in .zshenv
 (( $+commands[mise] )) && eval "$(mise activate zsh)"
 
+# ripgrep: always-ignore globs (.git, node_modules) for every rg run,
+# including telescope live_grep and grug-far inside nvim
+export RIPGREP_CONFIG_PATH="${XDG_CONFIG_HOME:-$HOME/.config}/ripgrep/config"
+
 # fzf: use fd for file/directory search (respects .gitignore)
 export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

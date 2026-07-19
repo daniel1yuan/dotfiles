@@ -1,0 +1,8 @@
+# Loaded on every rg run via RIPGREP_CONFIG_PATH (set in zsh/zsh.d/env.zsh).
+# Keeps .git and node_modules out of results even with --no-ignore-vcs
+# (nvim's <leader>sG "grep everything"). Explicitly named paths
+# (rg foo node_modules/x.js) are still searched.
+# Sibling lists: fd/ignore (file finder) and filters.custom in
+# nvim/lua/danielyuan/lazy/nvim-tree.lua (file tree).
+--glob=!.git/
+--glob=!node_modules/
