@@ -8,8 +8,9 @@ Personal dotfiles for zsh, neovim, kitty, and starship. XDG-compliant where poss
 |------|--------|-------------|
 | **zsh** | `zsh/` | Shell with [antidote](https://antidote.sh/) plugins, modular config via `zsh.d/` |
 | **neovim** | `nvim/` | Editor with [lazy.nvim](https://github.com/folke/lazy.nvim) plugins, LSP, treesitter, telescope |
-| **kitty** | `kitty/` | Terminal emulator (optional) with custom keybindings and theme |
-| **ghostty** | `ghostty/` | Terminal emulator (optional), mirrors the kitty setup |
+| **kitty** | `kitty/` | Terminal emulator (opt-in module) with custom keybindings and theme |
+| **ghostty** | `ghostty/` | Terminal emulator (opt-in module), mirrors the kitty setup |
+| **wezterm** | `wezterm/` | Terminal emulator (opt-in module), mirrors the kitty/ghostty setup with SSH domains in gitignored `custom.lua` |
 | **starship** | `starship/` | Minimal cross-shell prompt (directory, git, command duration) |
 | **lazygit** | `lazygit/` | Git TUI with catppuccin theme, opens in nvim via `<leader>gg` |
 | **git** | `git/` | Sane defaults (rebase pulls, rerere, zdiff3) with [delta](https://github.com/dandavison/delta) diffs. Identity lives in `~/.gitconfig.local` per machine |
@@ -42,6 +43,17 @@ sh install.sh -f
 
 This installs OS packages (brew/apt), mise and the CLI tools apt can't provide, neovim 0.12+, node + python runtimes (which activate the nvim LSPs), the Nerd Font, symlinks all configs, and migrates any existing `~/.gitconfig` to `~/.gitconfig.local`. Steps that can't run (no sudo, no brew) warn and continue. Safe to re-run any time.
 
+Terminal emulator configs (kitty, ghostty, wezterm) are **opt-in modules**: they're linked only when that terminal's binary is already installed on the machine, or when you ask for one explicitly:
+
+```sh
+sh install.sh -f --with wezterm          # one module
+sh install.sh -f --with ghostty,wezterm  # comma list (or repeat the flag)
+sh install.sh -f --with all              # every module
+sh install.sh --uninstall kitty          # remove one module's symlinks
+```
+
+To swap terminals, uninstall the old module and opt into the new one: `sh install.sh --uninstall kitty && sh install.sh -f --with wezterm`. Note the opt-out isn't remembered: a later plain run re-links the module if its binary is still on PATH (binary presence counts as opting in).
+
 ### 2. Optional extras
 
 Go and Rust aren't installed by default; their nvim LSPs activate when the runtime exists:
@@ -72,8 +84,9 @@ sh install.sh --uninstall
 | `-f` | Force mode. Backs up existing files to `~/.dotfiles-backup/` and overwrites. |
 | `-q` | Quiet mode. Suppresses console output. |
 | `--dry-run` | Show what would happen without making changes. |
-| `--uninstall` | Remove symlinks created by this script. |
+| `--uninstall [module]` | Remove symlinks created by this script. With a module argument (`--uninstall kitty`, commas ok), removes just that module's links. |
 | `--skip-packages` | Skip the package installation step. |
+| `--with <module>` | Opt into an optional module (`kitty`, `ghostty`, `wezterm`, or `all`). Repeatable, and comma lists work. Modules whose binary is installed are linked automatically. |
 | `--home <dir>` | Custom home directory (default: `~`) |
 | `--config <dir>` | Custom config directory (default: `~/.config`) |
 
@@ -113,6 +126,7 @@ dotfiles/
 ├── nvim/                → ~/.config/nvim/
 ├── kitty/               → ~/.config/kitty/
 ├── ghostty/             → ~/.config/ghostty/
+├── wezterm/             → ~/.config/wezterm/
 ├── git/                 → ~/.config/git/
 ├── lazygit/             → ~/.config/lazygit/
 ├── starship/
@@ -125,7 +139,7 @@ dotfiles/
 
 ## Machine-Specific Config
 
-Files matching `*custom.*` and `*secret.*` in `zsh/zsh.d/` are gitignored. Use these for machine-specific environment variables, paths, and credentials.
+Files matching `*custom.*` and `*secret.*` in `zsh/zsh.d/` are gitignored, as is `wezterm/custom.lua`. Use these for machine-specific environment variables, paths, and credentials.
 
 ## Updating the Brewfile
 

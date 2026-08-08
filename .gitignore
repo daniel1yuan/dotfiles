@@ -1,3 +1,4 @@
 **/*secret.*
 zsh/zsh.d/*custom.*
+wezterm/*custom.*
 nvim/spell/*.spl

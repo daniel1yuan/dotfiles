@@ -34,3 +34,5 @@ Mac muscle memory works on both OSes. macOS already binds these to **Cmd** out o
 - **Linux:** see [ghostty.org/docs/install](https://ghostty.org/docs/install/binary)
 
 The config symlinks to `~/.config/ghostty/config`, which ghostty reads on both macOS and Linux.
+
+This is an opt-in module: `install.sh` links it only when the `ghostty` binary is already installed, or when run with `--with ghostty`.

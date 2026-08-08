@@ -6,7 +6,10 @@
 #   sh install.sh -f                           Force install (backs up and overwrites)
 #   sh install.sh --dry-run                    Show what would happen
 #   sh install.sh --uninstall                  Remove symlinks created by this script
+#   sh install.sh --uninstall kitty            Remove just that module's symlinks
 #   sh install.sh --skip-packages              Skip package installation
+#   sh install.sh --with wezterm               Opt into an optional module
+#                                              (repeatable, commas ok, or "all")
 #   sh install.sh -f --home ~/x --config ~/y   Custom directories
 
 set -e
@@ -24,6 +27,8 @@ VERBOSE=1
 DRY_RUN=0
 UNINSTALL=0
 SKIP_PACKAGES=0
+WITH_MODULES=""
+UNINSTALL_MODULES=""
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -31,8 +36,18 @@ while [ $# -gt 0 ]; do
     -q) VERBOSE=0 ;;
     -fq|-qf) FORCE=1; VERBOSE=0 ;;
     --dry-run) DRY_RUN=1; VERBOSE=1 ;;
-    --uninstall|--cleanup) UNINSTALL=1 ;;
+    --uninstall|--cleanup)
+      UNINSTALL=1
+      # Optional module argument: --uninstall kitty (commas ok)
+      if [ -n "$2" ] && [ "${2#-}" = "$2" ]; then
+        UNINSTALL_MODULES="$UNINSTALL_MODULES $(printf '%s' "$2" | tr ',' ' ')"; shift
+      fi ;;
     --skip-packages) SKIP_PACKAGES=1 ;;
+    --with)
+      if [ -z "$2" ] || [ "${2#-}" != "$2" ]; then
+        echo "Error: --with requires a module argument" >&2; exit 1
+      fi
+      WITH_MODULES="$WITH_MODULES $(printf '%s' "$2" | tr ',' ' ')"; shift ;;
     --home)
       if [ -z "$2" ] || [ "${2#-}" != "$2" ]; then
         echo "Error: --home requires a directory argument" >&2; exit 1
@@ -70,8 +85,6 @@ zsh/zsh_plugins.txt:$CONFIG_DIR/zsh/zsh_plugins.txt
 zsh/zsh.d:$CONFIG_DIR/zsh/zsh.d
 zsh/KEYBINDINGS.md:$CONFIG_DIR/zsh/KEYBINDINGS.md
 nvim:$CONFIG_DIR/nvim
-kitty:$CONFIG_DIR/kitty
-ghostty:$CONFIG_DIR/ghostty
 git:$CONFIG_DIR/git
 fd:$CONFIG_DIR/fd
 ripgrep:$CONFIG_DIR/ripgrep
@@ -79,12 +92,54 @@ lazygit:$CONFIG_DIR/lazygit
 starship/starship.toml:$CONFIG_DIR/starship.toml
 "
 
+# Optional modules (terminal emulators): configs are linked only when opted
+# in. A module is opted in when its binary is on PATH (installing the
+# terminal = wanting its config) or when passed explicitly via --with.
+OPTIONAL_MODULES="kitty ghostty wezterm"
+
+module_links() {
+  case "$1" in
+    kitty)   echo "kitty:$CONFIG_DIR/kitty" ;;
+    ghostty) echo "ghostty:$CONFIG_DIR/ghostty" ;;
+    wezterm) echo "wezterm:$CONFIG_DIR/wezterm" ;;
+  esac
+}
+
+module_enabled() {
+  case " $WITH_MODULES " in
+    *" $1 "*) return 0 ;;
+  esac
+  command -v "$1" >/dev/null 2>&1
+}
+
+# Expand "all" and reject typos in --with / --uninstall <module>. Runs in a
+# command substitution, so the exit 1 fails the assignment and set -e stops
+# the script.
+expand_modules() {
+  out=""
+  for mod in $1; do
+    if [ "$mod" = "all" ]; then
+      out="$out $OPTIONAL_MODULES"
+      continue
+    fi
+    case " $OPTIONAL_MODULES " in
+      *" $mod "*) out="$out $mod" ;;
+      *)
+        echo "Error: unknown module '$mod' (available: $OPTIONAL_MODULES)" >&2
+        exit 1 ;;
+    esac
+  done
+  echo "$out"
+}
+WITH_MODULES="$(expand_modules "$WITH_MODULES")"
+UNINSTALL_MODULES="$(expand_modules "$UNINSTALL_MODULES")"
+
 # --- Dependency validation ---
 
-# Terminal emulators (kitty/ghostty) are optional: configs are symlinked
-# regardless, and whichever terminal is installed picks its config up.
+# Terminal emulators aren't listed here: their configs are opt-in modules
+# (see OPTIONAL_MODULES above).
 REQUIRED_TOOLS="git zsh nvim"
-OPTIONAL_TOOLS="mise fzf fd bat eza zoxide rg starship kitty ghostty lazygit delta sops age node python3"
+OPTIONAL_TOOLS="mise fzf fd bat eza zoxide rg starship lazygit delta sops age node python3"
 
 check_deps() {
   log "Checking dependencies..."
@@ -192,6 +247,20 @@ if [ $UNINSTALL -eq 1 ]; then
   if [ $DRY_RUN -eq 1 ]; then
     log "Dry run, no changes will be made"
   fi
+
+  # Module-scoped uninstall: only that module's links, core stays
+  if [ -n "$UNINSTALL_MODULES" ]; then
+    log "Removing module symlinks:$UNINSTALL_MODULES..."
+    for mod in $UNINSTALL_MODULES; do
+      for entry in $(module_links "$mod"); do
+        unlink "${entry%%:*}" "${entry#*:}"
+      done
+    done
+    log ""
+    log "Done."
+    exit 0
+  fi
+
   log "Removing dotfile symlinks..."
   log "  Home:   $HOME_DIR"
   log "  Config: $CONFIG_DIR"
@@ -203,6 +272,14 @@ if [ $UNINSTALL -eq 1 ]; then
     if [ -n "$source" ] && [ -n "$target" ]; then
       unlink "$source" "$target"
     fi
+  done
+
+  # Module links are removed regardless of opt-in state. unlink only touches
+  # symlinks this repo created.
+  for mod in $OPTIONAL_MODULES; do
+    for entry in $(module_links "$mod"); do
+      unlink "${entry%%:*}" "${entry#*:}"
+    done
   done
 
   # Remove empty parent directories created by install
@@ -256,11 +333,25 @@ if [ $DRY_RUN -eq 0 ]; then
   mkdir -p "$CONFIG_DIR/zsh"
 fi
 
+# `|| true` because link returns 1 on "already exists" skips, which set -e
+# would otherwise turn into a hard exit.
 for entry in $LINKS; do
   source="${entry%%:*}"
   target="${entry#*:}"
   if [ -n "$source" ] && [ -n "$target" ]; then
-    link "$source" "$target"
+    link "$source" "$target" || true
+  fi
+done
+
+log ""
+log "Optional modules:"
+for mod in $OPTIONAL_MODULES; do
+  if module_enabled "$mod"; then
+    for entry in $(module_links "$mod"); do
+      link "${entry%%:*}" "${entry#*:}" || true
+    done
+  else
+    log "  [skip] $mod (not installed; opt in with --with $mod)"
   fi
 done
 
